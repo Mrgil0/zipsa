@@ -11,26 +11,29 @@ app = Flask(__name__)
 # 참고 - https://problem-solving.tistory.com/10
 # 참고 - https://shanepark.tistory.com/64
 
-
-# route
-@app.route('/')
-def root():
-    return render_template('index.html')
-
-
-@app.route('/getName', methods=["GET"])
-def groupsLayout():
+def getUser():
     db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
     curs = db.cursor()
 
-    sql = """select * from user"""
+    sql = "select * from user"
     curs.execute(sql)
     rows = curs.fetchall()
-    json_str = json.dumps(rows, indent=4, sort_keys=True, default=str)
-    print(json_str)
+    json_str = list(list(rows)[0])
+    #json_str = json.dumps(rows, indent=4, sort_keys=True, default=str)
     db.commit()
     db.close()
-    return json_str, 200
+    return json_str
+
+
+# route
+@app.route('/')
+def index():
+    return render_template('index.html', component_name='newsfeed', posts=getUser())
+
+
+@app.route('/getName', methods=["GET"])
+def getName():
+    return getUser(), 200
 
 
 # 서버실행
