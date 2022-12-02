@@ -1,14 +1,42 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <!-- axios -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/reset.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/fonts.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/variable.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/header.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/mainSection.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style/footer.css') }}">
+
+    <!-- axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title>Title</title>
+    <title>sparta_gram</title>
 </head>
 <body>
 
+<button onclick="getName()">확인</button>
+
 </body>
+<script>
+    function getName(){
+        let tr = ``
+        $.ajax({
+            type : "GET",
+            url : '/getName',
+            data : {},
+            success : function(response){
+                let rows = response['comments']
+                callbackfunc(rows)
+            },
+            error : function(response) {
+                console.log(response)
+            }
+        });
+
+    }
+
+</script>
 </html>
