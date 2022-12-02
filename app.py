@@ -15,17 +15,22 @@ app = Flask(__name__)
 # route
 @app.route('/')
 def root():
-    return render_template('index.html', component_name='groups')
+    return render_template('index.html')
 
-@app.route('/getName')
+
+@app.route('/getName', methods=["GET"])
 def groupsLayout():
     db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
     curs = db.cursor()
 
-    user = request.json
-
-    first_name = user['user_id']
-    return render_template('index.html', component_name='groups')
+    sql = """select * from user"""
+    curs.execute(sql)
+    rows = curs.fetchall()
+    json_str = json.dumps(rows, indent=4, sort_keys=True, default=str)
+    print(json_str)
+    db.commit()
+    db.close()
+    return json_str, 200
 
 
 # 서버실행
