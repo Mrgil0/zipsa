@@ -105,8 +105,12 @@ def login_post():
     pw_receive = request.form['pw_give']
     em_receive = request.form['em_give']
     insert_user(id_receive, pw_receive, em_receive)
-
     return jsonify({'msg': 'join_ok'})
+
+
+@app.route('/mypage', methods=["GET"])
+def mypage():
+    return render_template('/components/mypage.html')
 
 
 @app.route('/check_id', methods=["POST"])

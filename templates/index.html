@@ -12,33 +12,24 @@
 
     <!-- axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title>sparta_gram</title>
+    <title>6Zipsa</title>
 </head>
 <body>
 
 <!-- header -->
 {% include "components/header.html" %}
- <div id="wrap">
-        <p>메뉴1</p>
-		<div id="MenuWrap" class="menuOff slide">
-		</div>
-
-		<div id="MenuHelp" style="position:absolute;left:10px;bottom:10px;z-index:100;display:none" onclick="menuOnOff()"></div>
-
-		<div id="Container">
-
-		</div>
-
-	</div>
 <!-- content -->
-<section id="mainSection">
-    {% if component_name == 'login' %}
-    {% include "components/post.html" %}
-    {% endif %}
-</section>
-
-<button onclick="getName()" type="button">확인</button>
-
+<div class="box">
+    <aside class="left_box">
+        <p>여기는 왼쪽</p>
+    </aside>
+    <section class="mainSection">
+        {% include "components/post.html" %}
+    </section>
+    <aside class="right_box">
+        <p>여기는 오른쪽</p>
+    </aside>
+</div>
 </body>
 <script>
     $(document).ready(function(){

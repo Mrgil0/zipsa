@@ -5,11 +5,13 @@
     <title>Title</title>
 </head>
 <body>
- <div style="overflow:hidden">
-     {% for post in posts %}
-        <p style="float:left">{{ post }}</p>
-     {% endfor %}
- </div>
-<p>로그인 성공!! newsfeed.html에 글쓰는 공간을 만들면 됩니다!</p>
+<section class="post_box">
+    {% if component_name == 'login' %}
+    <input class="post_area">
+    <button type="button">작성</button>
+    {% elif component_name == 'logout' %}
+    <button class="login_btn" type="button" onclick="location.href='/login'">로그인 하러 가기</button>
+    {% endif %}
+</section>
 </body>
 </html>
