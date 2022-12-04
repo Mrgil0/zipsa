@@ -34,12 +34,12 @@ def insert_user(user_id, password, email):
     db.close()
 
 
-def find_user(table_name, column_name, user_id):
+def find_user(user_id):
     db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
     curs = db.cursor()
 
-    sql = "select user_id from (%s) where (%s) = (%s)"
-    record = (table_name, column_name, user_id)
+    sql = "select user_id from user where user_id = (%s)"
+    record = user_id
     curs.execute(sql, record)
     try:
         result = list(list(curs.fetchone()))[0]
@@ -80,7 +80,7 @@ def index():
 @app.route('/login', methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template('/components/modal.html', component_name='login')
+        return render_template('/components/modal.html', component_name='logout')
     else:
         id_receive = request.form["id_give"]
         pw_receive = request.form["pw_give"]
@@ -112,7 +112,7 @@ def login_post():
 @app.route('/check_id', methods=["POST"])
 def get_id():
     id_receive = request.form['id_give']
-    result = find_user('user', 'user_id', id_receive)
+    result = find_user(id_receive)
     return jsonify({'msg': result})
 
 
