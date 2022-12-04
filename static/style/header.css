@@ -17,12 +17,73 @@ header ul {
 
 header li {
     margin-right: 1rem;
+	list-style: none;
+}
+header li a{
+	text-decoration-line:none;
 }
 
 header li:last-child {
     margin: 0;
 }
+#MenuWrap {
 
-header a {
-    color: var(--main-font-color);
+	position:absolute;
+
+	width:200px;
+
+	height:100%;
+
+	left:0px;
+
+	top:0px;
+
+	z-index:4;
+
+	overflow:hidden;
+
+	background-color:#4988C7;
+
+	color:#FFFFFF;
+
+}
+
+
+
+#MenuWrap.slide {
+
+	-webkit-transition: all 0.5s;
+
+	-moz-transition: all 0.5s;
+
+	transition: all 0.5s;
+
+}
+
+
+
+#MenuWrap.menuOff{
+
+	box-shadow: 1px 0 2px rgba(0,0,0,0.2);
+
+	-webkit-transform: translate3d(-100%, 0, 0);
+
+	-moz-transform: translate3d(-100%, 0, 0);
+
+	transform: translate3d(-100%, 0, 0);
+
+}
+
+
+
+#MenuWrap.menuOn{
+
+	box-shadow: 1px 0 2px rgba(0,0,0,0.2);
+
+	-webkit-transform: translate3d(0, 0, 0);
+
+	-moz-transform: translate3d(0, 0, 0);
+
+	transform: translate3d(0, 0, 0);
+
 }

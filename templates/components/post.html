@@ -5,11 +5,11 @@
     <title>Title</title>
 </head>
 <body>
- <div>
-     <p>게시글</p>
+ <div style="overflow:hidden">
      {% for post in posts %}
-        <p>{{ post }}</p>
+        <p style="float:left">{{ post }}</p>
      {% endfor %}
  </div>
+<p>로그인 성공!! newsfeed.html에 글쓰는 공간을 만들면 됩니다!</p>
 </body>
 </html>

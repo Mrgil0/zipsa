@@ -1,0 +1,20 @@
+{% if component_name == 'login' %}
+{% extends '/components/login.html' %}
+{% elif component_name == 'join' %}}
+{% extends '/components/join.html' %}
+{% endif %}
+
+{% block content %}
+<div id="modal" class="modal-overlay">
+    <div class="modal-window">
+        <div class="title">
+            <h2>알림</h2>
+        </div>
+        <div class="close-area" id="closeBtn">X</div>
+        <div class="content">
+            <p id="context"></p>
+        </div>
+        <button id="modalClose" type="button">확인</button>
+    </div>
+</div>
+{% endblock %}

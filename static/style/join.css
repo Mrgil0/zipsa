@@ -1,0 +1,30 @@
+.container{
+  position: absolute;
+  left:50%;
+  top:50%;
+  transform: translate(-50%, -50%);
+  width: 300px;
+  height: 500px;
+}
+.form{
+  display: flex;
+  flex-direction: column;
+}
+.form_title{
+  text-align: center;
+}
+.item{
+  flex-grow : 1;
+  height: 30px;
+}
+#join_user_id{
+  width:240px;
+}
+#user_id_check_btn{
+  height:36px;
+  margin-left: 5px;
+}
+.form_button{
+  display: flex;
+  justify-content: space-around;
+}

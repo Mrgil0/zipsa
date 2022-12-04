@@ -1,9 +1,14 @@
 <header>
+
     <h2>Spartagram</h2>
     <nav>
         <ul>
             <li><a href="{{ url_for('index') }}">홈</a></li>
-            <li><a href="/users-layout">로그인</a></li>
+            {% if component_name == 'logout' %}
+            <li><a href="{{ url_for('login') }}">로그인</a></li>
+            {% elif component_name == 'login' %}
+            <li><a href="{{ url_for('logout') }}">로그아웃</a></li>
+            {% endif %}
             <li><a href="/images-layout">Photos</a></li>
         </ul>
     </nav>

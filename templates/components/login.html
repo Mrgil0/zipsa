@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../../static/style/join.css" rel="stylesheet">
+    <link href="../../static/style/header.css" rel="stylesheet">
+    <link href="../../static/style/modal.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+{% include "components/header.html" %}
+<div class="container">
+    <form class="form">
+      <h2 class="form_title">로그인</h2>
+      <input type="text" placeholder="아이디" name="user_id" id="login_user_id" class="item" /><br>
+      <input type="password" placeholder="비밀번호" name="password" id="login_password" class="item" /><br>
+      <div class="form_button">
+          <button class="btn" type="button" onclick="login()">로그인</button>
+          <button class="btn" type="button" onclick="location.href='/join'">회원가입</button>
+      </div>
+    </form>
+  </div>
+{% block content %}
+    {% endblock %}
+</body>
+<script type="text/javascript" src="../../static/js/modal.js"></script>
+<script type="text/javascript" src="../../static/js/validate.js"></script>
+<script>
+    function login(){
+        let user_id = $('#login_user_id').val()
+        let password = $('#login_password').val()
+        if(user_id === '' || password === ''){
+            modalOpen('칸이 비어있습니다.')
+            return
+        }
+        $.ajax({
+            type : "POST",
+            url : "/login",
+            data : {'id_give': user_id, 'pw_give': password},
+            success : function (response){
+                let result = response['msg']
+                if(result === 'fail'){
+                    modalOpen('비밀번호가 일치하지 않습니다.')
+                } else{
+                    location.href="/"
+                }
+            }
+        })
+    }
+</script>
+</html>
