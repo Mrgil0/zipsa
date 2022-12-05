@@ -29,8 +29,8 @@ $(document).keyup(function(e){
 
 $("#modalClose").click(function(){
     $('#modal').css('display', 'none')
-    if(clicked == 1){
-        clicked = 0
+    if(refresh == 1){
+        refresh = 0
         location.reload()
     }
 })
