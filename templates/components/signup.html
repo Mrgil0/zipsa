@@ -77,12 +77,12 @@
         }
         $.ajax({
             type : "POST",
-            url : "/join",
+            url : "/api/singup",
             data : {'id_give': user_id, 'pw_give': password, 'em_give': email,
                 'pet_type_give': pet_type, 'pet_name_give': pet_name, 'pet_introduce_give': pet_introduce,'pet_image_src': file_url},
             success : function (response){
                 let result = response['msg']
-                if(result === 'join_ok'){
+                if(result === 'success'){
                     refresh = 1
                     modalOpen('회원가입 완료')
                     id_check = false
@@ -92,7 +92,7 @@
     }
     $(document).on('click', '#user_id_check_btn', function(){
         let user_id = $('#join_user_id').val()
-        check_id(user_id, '/check_id')
+        check_id(user_id, '/api/checkid')
     })
     let changed = document.querySelectorAll(".dropdown-item")
     changed.forEach(element=>{

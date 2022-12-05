@@ -4,13 +4,7 @@ import pymysql
 app = Flask(__name__)
 
 
-#  튜플에서 딕셔너리로 cursor= db.cursor(pymysql.cursors.DictCursor)
-
-# db 연결
-# 참고 - https://problem-solving.tistory.com/10
-# 참고 - https://shanepark.tistory.com/64
-
-def get_pet_image(user_id):
+def read_pet_image(user_id):
     db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
     curs = db.cursor()
 
@@ -26,6 +20,20 @@ def get_pet_image(user_id):
     db.commit()
     db.close()
     return json_str
+
+
+def read_posts():
+    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    curs = db.cursor()
+
+    sql = "select * from post"
+    curs.execute(sql)
+    result = curs.fetchall()
+    if len(result) is 0 :
+        return 'empty'
+    db.commit()
+    db.close()
+    return result
 
 
 def insert_user(user_id, password, email):
@@ -61,7 +69,7 @@ def find_user(user_id):
         result = list(list(curs.fetchone()))[0]
     except TypeError:
         print('타입 에러')
-        return 'none'
+        return 'fail'
     db.commit()
     db.close()
     return result
@@ -89,37 +97,47 @@ def login_user(user_id, password):
 @app.route('/')
 def index():
     if session.get('logged_in'):
-        profile_image = get_pet_image(session['user_id'])
-        print(profile_image)
-        return render_template('index.html', component_name='login', pet_image=profile_image)
+        profile_image = read_pet_image(session['user_id'])
+        post = read_posts()
+        return render_template('index.html', component_name='login', pet_image=profile_image, posts=post, len=len(post))
     else:
         return render_template('index.html', component_name='logout')
 
 
-@app.route('/login', methods=["GET", "POST"])
-def login():
-    if request.method == "GET":
-        return render_template('/components/modal.html', component_name='logout')
-    else:
-        id_receive = request.form["id_give"]
-        pw_receive = request.form["pw_give"]
-        result = login_user(id_receive, pw_receive)
-        if result == 'success':
-            return jsonify({'msg': 'success'})
-        else:
-            return jsonify({'msg': 'fail'})
+@app.route('/page/login', methods=["GET"])
+def get_login():
+    return render_template('/components/modal.html', component_name='logout')
 
 
-@app.route('/logout', methods=["GET"])
+@app.route('/page/logout', methods=["GET"])
 def logout():
     session['logged_in'] = False
     return render_template('index.html', component_name='logout')
 
 
-@app.route('/join', methods=["GET", "POST"])
+@app.route('/page/singup', methods=["GET"])
+def get_signup():
+    return render_template('/components/modal.html', component_name='singup')
+
+
+@app.route('/page/profile', methods=["GET"])
+def read_my_profile():
+    return render_template('/components/profile.html')
+
+
+@app.route('/api/login', methods=["POST"])
+def read_user():
+    id_receive = request.form["id_give"]
+    pw_receive = request.form["pw_give"]
+    result = login_user(id_receive, pw_receive)
+    if result == 'success':
+        return jsonify({'msg': 'success'})
+    else:
+        return jsonify({'msg': 'fail'})
+
+
+@app.route('/api/singup', methods=["POST"])
 def login_post():
-    if request.method == 'GET':
-        return render_template('/components/modal.html', component_name='join')
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
     em_receive = request.form['em_give']
@@ -129,15 +147,10 @@ def login_post():
     pet_image_receive = request.form['pet_image_src']
     insert_user(id_receive, pw_receive, em_receive)
     insert_pet(id_receive, pet_type_receive, pet_name_receive, pet_introduce_receive, pet_image_receive)
-    return jsonify({'msg': 'join_ok'})
+    return jsonify({'msg': 'success'})
 
 
-@app.route('/mypage', methods=["GET"])
-def mypage():
-    return render_template('/components/mypage.html')
-
-
-@app.route('/check_id', methods=["POST"])
+@app.route('/api/checkid', methods=["POST"])
 def get_id():
     id_receive = request.form['id_give']
     result = find_user(id_receive)
