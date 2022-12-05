@@ -1,4 +1,4 @@
-.container{
+#join_form, #login_form{
   position: absolute;
   left:50%;
   top:50%;
@@ -13,18 +13,17 @@
 .form_title{
   text-align: center;
 }
-.item{
-  flex-grow : 1;
-  height: 30px;
-}
 #join_user_id{
-  width:240px;
+  width:200px
 }
 #user_id_check_btn{
-  height:32px;
+  float:right;
+  height:28px;
   margin-left: 10px;
 }
-.form_button{
-  display: flex;
-  justify-content: space-around;
+.form_button button{
+  float:right
+}
+#join_button{
+  margin-left: 5px;
 }

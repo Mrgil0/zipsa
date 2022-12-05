@@ -5,22 +5,27 @@
     <link href="../../static/style/join.css" rel="stylesheet">
     <link href="../../static/style/modal.css" rel="stylesheet">
     <link href="../../static/style/header.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Title</title>
 </head>
 <body>
 {% include "components/header.html" %}
   <!-- Sign Up -->
-  <div class="container">
+  <div class="container" id="join_form">
     <form class="form">
       <h2 class="form_title">회원 가입</h2>
       <div>
-          <input type="text" placeholder="아이디" name="user_id" id="join_user_id" class="item" /><button type="button" id="user_id_check_btn">확인</button>
+          <input type="text" placeholder="아이디" name="user_id" id="join_user_id" class="form_label" /><button type="button" class="btn btn-primary mb-3" id="user_id_check_btn">확인</button>
       </div><br>
-      <input type="password" placeholder="비밀번호" name="password" id="join_password" class="item" /><br>
-      <input type="password" placeholder="비밀번호 확인" id="join_password_chk" class="item" /><br>
-      <input type="email" placeholder="이메일" name="email" id="join_email" class="item" /><br>
-      <button class="btn" type="button" onclick="join()">회원 가입</button>
+      <input type="password" placeholder="비밀번호" name="password" id="join_password" class="form_label" /><br>
+      <input type="password" placeholder="비밀번호 확인" id="join_password_chk" class="form_label" /><br>
+      <input type="email" placeholder="이메일" name="email" id="join_email" class="form_label" /><br>
+      <button class="btn btn-info" type="button" onclick="join()">회원 가입</button>
     </form>
   </div>
 {% block content %}
