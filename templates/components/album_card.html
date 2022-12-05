@@ -1,23 +1,29 @@
 
 <div class="container py-4">
     <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-        {% for x in range(6) %}
+        {% if posts == 'empty' %}
+        <h1 style="text-align: center; margin:0 auto">앗! 글이 없네요..</h1>
+        {% else %}
+        {% for i in range(0, len) %}
         <div class="col">
             <div class="card shadow-sm">
                 <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
                 <div class="card-body">
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
+                    <p class="card-title-">{{posts[i][2]}}</p>
+                    <p class="card-text">{{posts[i][3]}}</p>
                     <div class="d-flex justify-content-between align-items-center">
                         <div class="btn-group">
-                            <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                            <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">보기</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">수정</button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary">삭제</button>
                         </div>
-                        <small class="text-muted">아이디</small>
+                        <small class="text-muted">{{posts[i][1]}}</small>
                         <small class="text-muted">9 mins</small>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
+        {% endif %}
     </div>
 </div>

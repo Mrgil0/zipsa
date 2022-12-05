@@ -27,24 +27,4 @@
 {% include "components/album_card.html" %}
 </div>
 </body>
-<script>
-    $(document).ready(function(){
-    getName()
-    });
-    function getName(){
-        let tr = ``
-        $.ajax({
-            type : "GET",
-            url : '/getName',
-            data : {},
-            success : function(response){
-
-            },
-            error : function(response) {
-                console.log(response)
-            }
-        });
-
-    }
-</script>
 </html>
