@@ -10,14 +10,19 @@ app = Flask(__name__)
 # 참고 - https://problem-solving.tistory.com/10
 # 참고 - https://shanepark.tistory.com/64
 
-def get_user():
+def get_pet_image(user_id):
     db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
     curs = db.cursor()
 
-    sql = "select * from user"
-    curs.execute(sql)
+    sql = "select pet_image from pet where user_id = (%s)"
+    record = user_id
+    curs.execute(sql, record)
     rows = curs.fetchall()
-    json_str = list(list(rows)[0])
+    try:
+        json_str = list(list(rows)[0])
+    except IndexError:
+        print('인덱스 에러')
+        return 'no image'
     db.commit()
     db.close()
     return json_str
@@ -29,6 +34,17 @@ def insert_user(user_id, password, email):
 
     sql = "insert into user values (%s, %s, %s)"
     record = (user_id, password, email)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
+
+
+def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
+    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    curs = db.cursor()
+
+    sql = "insert into pet values (%s, %s, %s, %s, %s)"
+    record = (user_id, pet_type, pet_name, pet_introduce, pet_image)
     curs.execute(sql, record)
     db.commit()
     db.close()
@@ -59,9 +75,10 @@ def login_user(user_id, password):
     record = (user_id, password)
     curs.execute(sql, record)
     try:
-        list(list(curs.fetchone()))[0]
+        result = list(list(curs.fetchone()))[0]
     except TypeError:
         return
+    session['user_id'] = result
     session['logged_in'] = True
     db.commit()
     db.close()
@@ -72,9 +89,11 @@ def login_user(user_id, password):
 @app.route('/')
 def index():
     if session.get('logged_in'):
-        return render_template('index.html', component_name='login', posts=get_user())
+        profile_image = get_pet_image(session['user_id'])
+        print(profile_image)
+        return render_template('index.html', component_name='login', pet_image=profile_image)
     else:
-        return render_template('index.html', component_name='logout', posts=get_user())
+        return render_template('index.html', component_name='logout')
 
 
 @app.route('/login', methods=["GET", "POST"])
@@ -104,7 +123,12 @@ def login_post():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
     em_receive = request.form['em_give']
+    pet_type_receive = request.form['pet_type_give']
+    pet_name_receive = request.form['pet_name_give']
+    pet_introduce_receive = request.form['pet_introduce_give']
+    pet_image_receive = request.form['pet_image_src']
     insert_user(id_receive, pw_receive, em_receive)
+    insert_pet(id_receive, pet_type_receive, pet_name_receive, pet_introduce_receive, pet_image_receive)
     return jsonify({'msg': 'join_ok'})
 
 
@@ -118,11 +142,6 @@ def get_id():
     id_receive = request.form['id_give']
     result = find_user(id_receive)
     return jsonify({'msg': result})
-
-
-@app.route('/getName', methods=["GET"])
-def getName():
-    return get_user(), 200
 
 
 # 서버실행
