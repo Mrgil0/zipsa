@@ -19,12 +19,88 @@
 
 <!-- 헤더 -->
 {% include "components/header.html" %}
-<div class="album bg-light">
-<!-- 글쓰는 곳 -->
-{% include "components/post.html" %}
+<div class="container">
+        <!-----------------left-sidebar-------------------->
+        <div class="left-sidebar">
 
-<!-- 글 리스트 -->
-{% include "components/album_card.html" %}
-</div>
+        </div>
+        <!-----------------main content-------------------->
+        <div class="main-content">
+
+            <div class="story-gallery">
+                <div class="story story1">
+                    <img src="images/shorts1.jpg">
+                    <p>오늘의 인기글</p>
+                </div>
+                <div class="story story2">
+                    <img src="images/shorts1.jpg">
+                    <p>주간 인기글</p>
+                </div>
+                <div class="story story3">
+                    <img src="images/shorts1.jpg">
+                    <p>최신 글</p>
+                </div>
+            </div>
+            <div class="write-post-container">
+                <div class="user-profile">
+                    <img src="../static/images/user.png">
+                    <div>
+                        <p>닉네임</p>
+                        <small>Olly</small>
+                    </div>
+                </div>
+
+                <div class="post-input-container">
+                    <textarea rows="3" placeholder="오늘의 반려동물 자랑을 해보세요" id="post_area"></textarea>
+                    <div class="add-post-links">
+                        <a href="#"><img src="../static/images/user.png"> Photo</a>
+                        <button type="button" class="btn btn-outline-info" id="post_button">작성</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-container">
+                <div class="user-profile">
+                    <img src="../static/images/user.png">
+                    <div>
+                        <p>닉네임</p>
+                        <span>December 2 2022, 13:40 pm</span>
+                    </div>
+                </div>
+                <p class="post-text">오늘은 올리의 생일입니다. 이모님에서 할머님이 되었어요. 모두 축하해주세요!</p>
+            </div>
+
+
+        </div>
+        <!-----------------right-sidebar-------------------->
+        <div class="right-sidebar">
+
+            <div class="event">
+
+            </div>
+
+        </div>
+
+    </div>
 </body>
+<script>
+    $('#post_button').click(function(e){
+        let post_area = $('#post_area').val()
+        let date = getFormatDate(new Date())
+        $.ajax({
+            type: 'POST',
+            url: '/api/posts',
+            data: {'post_give': post_area,'date_give': date},
+            success: function(response){
+            if (response['msg']=='success'){
+                modalOpen('글 작성 완료!.')
+            }
+            },
+            error: function(response){
+
+            }
+        })
+    })
+</script>
+<script type="text/javascript"src="../../static/js/date.js"></script>
 </html>

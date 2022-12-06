@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, jsonify, session
-import pymysql
+import pymysql, os
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 
 def set_db_password():
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8') # password를 각자 db의 비밀번호에 맞게 변경
+    db = pymysql.connect(host='localhost', user='lsi', db='zipsa', password='0000', charset='utf8') # password를 각자 db의 비밀번호에 맞게 변경
     return db
 
 
@@ -99,6 +100,18 @@ def login_user(user_id, password):
     return 'success'
 
 
+
+def insert_post(user_id, post_content, post_date):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "insert into post values (null,%s, %s,TO_DATE(%s,'YYYY/MM/DD'))"
+    record = (user_id, post_content, post_date)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
+
+
 # route
 @app.route('/')
 def index():
@@ -121,7 +134,7 @@ def logout():
     return render_template('index.html', component_name='logout')
 
 
-@app.route('/page/singup', methods=["GET"])
+@app.route('/page/signup', methods=["GET"])
 def get_signup():
     return render_template('/components/modal.html', component_name='singup')
 
@@ -163,7 +176,14 @@ def get_id():
     return jsonify({'msg': result})
 
 
+@app.route('/api/posts', methods=["POST"])
+def insert_posts():
+    content_receive = request.form['post_give']
+    date_receive = request.form['date_give']
+    user_id = session['user_id']
+    insert_post(content_receive, date_receive, user_id)
+    return jsonify({'msg': 'success'})
+
 # 서버실행
 if __name__ == '__main__':
-    app.secret_key = "15481245"
     app.run(host='127.0.0.1', port=8000)
