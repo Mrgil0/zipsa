@@ -4,8 +4,13 @@ import pymysql
 app = Flask(__name__)
 
 
+def set_db_password():
+    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8') # password를 각자 db의 비밀번호에 맞게 변경
+    return db
+
+
 def read_pet_image(user_id):
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    db = set_db_password()
     curs = db.cursor()
 
     sql = "select pet_image from pet where user_id = (%s)"
@@ -23,7 +28,7 @@ def read_pet_image(user_id):
 
 
 def read_posts():
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    db = set_db_password()
     curs = db.cursor()
 
     sql = "select * from post"
@@ -38,7 +43,7 @@ def read_posts():
 
 
 def insert_user(user_id, password, email):
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    db = set_db_password()
     curs = db.cursor()
 
     sql = "insert into user values (%s, %s, %s)"
@@ -49,7 +54,7 @@ def insert_user(user_id, password, email):
 
 
 def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    db = set_db_password()
     curs = db.cursor()
 
     sql = "insert into pet values (%s, %s, %s, %s, %s)"
@@ -60,7 +65,7 @@ def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
 
 
 def find_user(user_id):
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    db = set_db_password()
     curs = db.cursor()
 
     sql = "select user_id from user where user_id = (%s)"
@@ -77,7 +82,7 @@ def find_user(user_id):
 
 
 def login_user(user_id, password):
-    db = pymysql.connect(host='localhost', user='root', db='zipsa', password='test', charset='utf8')
+    db = set_db_password()
     curs = db.cursor()
 
     sql = "select * from user where user_id = (%s) and password = (%s)"
