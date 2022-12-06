@@ -14,7 +14,7 @@
                 </form>
 
                 <div class="text-end">
-                    {% if component_name == 'logout' %}
+                    {% if status == 'logout' %}
                     <button type="button" class="btn btn-outline-light me-2" onclick="location.href='/page/login'">Login</button>
                     {% elif component_name == 'login' %}
                     <div class="dropdown text-end">

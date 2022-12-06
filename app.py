@@ -104,8 +104,8 @@ def login_user(user_id, password):
 def insert_post(user_id, post_content, post_date):
     db = set_db_password()
     curs = db.cursor()
-
-    sql = "insert into post values (null,%s, %s,TO_DATE(%s,'YYYY/MM/DD'))"
+    print(post_date)
+    sql = "insert into post values (null,%s, %s,%s)"
     record = (user_id, post_content, post_date)
     curs.execute(sql, record)
     db.commit()
@@ -118,9 +118,9 @@ def index():
     post = read_posts()
     if session.get('logged_in'):
         profile_image = read_pet_image(session['user_id'])
-        return render_template('index.html', component_name='login', pet_image=profile_image, posts=post, len=len(post))
+        return render_template('/components/modal.html', component_name='login', pet_image=profile_image, posts=post, len=len(post), index="home")
     else:
-        return render_template('index.html', component_name='logout', posts=post, len=len(post))
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), index="home")
 
 
 @app.route('/page/login', methods=["GET"])
@@ -181,7 +181,7 @@ def insert_posts():
     content_receive = request.form['post_give']
     date_receive = request.form['date_give']
     user_id = session['user_id']
-    insert_post(content_receive, date_receive, user_id)
+    insert_post(user_id, content_receive, date_receive)
     return jsonify({'msg': 'success'})
 
 # 서버실행

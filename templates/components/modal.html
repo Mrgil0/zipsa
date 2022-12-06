@@ -1,7 +1,9 @@
 {% if component_name == 'logout' %}
 {% extends '/components/login.html' %}
-{% elif component_name == 'singup' %}
+{% elif component_name == 'signup' %}
 {% extends '/components/signup.html' %}
+{% elif index == 'home' %}
+{% extends '/index.html' %}
 {% endif %}
 
 {% block content %}
