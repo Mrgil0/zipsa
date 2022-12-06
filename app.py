@@ -29,8 +29,9 @@ def read_posts():
     sql = "select * from post"
     curs.execute(sql)
     result = curs.fetchall()
-    if len(result) is 0 :
+    if len(result) == 0:
         return 'empty'
+    print(result)
     db.commit()
     db.close()
     return result
@@ -96,12 +97,12 @@ def login_user(user_id, password):
 # route
 @app.route('/')
 def index():
+    post = read_posts()
     if session.get('logged_in'):
         profile_image = read_pet_image(session['user_id'])
-        post = read_posts()
         return render_template('index.html', component_name='login', pet_image=profile_image, posts=post, len=len(post))
     else:
-        return render_template('index.html', component_name='logout')
+        return render_template('index.html', component_name='logout', posts=post, len=len(post))
 
 
 @app.route('/page/login', methods=["GET"])
