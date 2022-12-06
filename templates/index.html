@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="../../static/style/index.css" rel="stylesheet">
+    <link href="../../static/style/modal.css" rel="stylesheet">
+    <script type="text/javascript" src="../../static/js/modal.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
@@ -12,42 +14,97 @@
             crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"
 	integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
-	crossorigin="anonymous">
-    <!-- axios -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	crossorigin="anonymous"></script>
     <title>6Zipsa</title>
 </head>
 <body>
 
 <!-- 헤더 -->
 {% include "components/header.html" %}
-<div class="album bg-light">
-<!-- 글쓰는 곳 -->
-{% include "components/post.html" %}
+<div class="container">
+        <!-----------------left-sidebar-------------------->
+        <div class="left-sidebar">
 
-<!-- 글 리스트 -->
-{% include "components/album_card.html" %}
-</div>
+        </div>
+        <!-----------------main content-------------------->
+        <div class="main-content">
+
+            <div class="story-gallery">
+                <div class="story story1">
+                    <img src="images/shorts1.jpg">
+                    <p>오늘의 인기글</p>
+                </div>
+                <div class="story story2">
+                    <img src="images/shorts1.jpg">
+                    <p>주간 인기글</p>
+                </div>
+                <div class="story story3">
+                    <img src="images/shorts1.jpg">
+                    <p>최신 글</p>
+                </div>
+            </div>
+            <div class="write-post-container">
+                <div class="user-profile">
+                    <img src="../static/images/user.png">
+                    <div>
+                        <p>닉네임</p>
+                        <small>Olly</small>
+                    </div>
+                </div>
+
+                <div class="post-input-container">
+                    <textarea rows="3" placeholder="오늘의 반려동물 자랑을 해보세요" id="post_area"></textarea>
+                    <div class="add-post-links">
+                        <a href="#"><img src="../static/images/user.png"> Photo</a>
+                        <button type="button" class="btn btn-outline-info" id="post_button">작성</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="post-container">
+                <div class="user-profile">
+                    <img src="../static/images/user.png">
+                    <div>
+                        <p>닉네임</p>
+                        <span>December 2 2022, 13:40 pm</span>
+                    </div>
+                </div>
+                <p class="post-text">오늘은 올리의 생일입니다. 이모님에서 할머님이 되었어요. 모두 축하해주세요!</p>
+            </div>
+
+
+        </div>
+        <!-----------------right-sidebar-------------------->
+        <div class="right-sidebar">
+
+            <div class="event">
+
+            </div>
+
+        </div>
+
+    </div>
+{% block content %}
+{% endblock %}
 </body>
 <script>
-    $(document).ready(function(){
-    getName()
-    });
-    function getName(){
-        let tr = ``
+    $('#post_button').click(function(e){
+        let post_area = $('#post_area').val()
+        let date = getFormatDate(new Date())
         $.ajax({
-            type : "GET",
-            url : '/getName',
-            data : {},
-            success : function(response){
-
-            },
-            error : function(response) {
-                console.log(response)
+            type: 'POST',
+            url: '/api/posts',
+            data: {'post_give': post_area,'date_give': date},
+            success: function(response){
+            if (response['msg']=='success'){
+                modalOpen('글 작성 완료!.')
             }
-        });
+            },
+            error: function(response){
 
-    }
-
+            }
+        })
+    })
 </script>
+<script type="text/javascript"src="../../static/js/date.js"></script>
 </html>

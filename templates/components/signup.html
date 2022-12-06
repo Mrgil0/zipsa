@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="../../static/style/join.css" rel="stylesheet">
+    <link href="../../static/style/modal.css" rel="stylesheet">
+    <link href="../../static/style/header.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+{% include "components/header.html" %}
+  <!-- Sign Up -->
+    <div class="container" id="join_form">
+        <form class="form">
+            <h2 class="form_title">회원 가입</h2>
+            <div>
+                <input type="text" name="user_id" id="join_user_id" class="form-control" style="display: inline-block" placeholder="아이디"/>
+                <button type="button" class="btn btn-primary mb-3" id="user_id_check_btn">확인</button>
+            </div>
+            <input type="password" placeholder="비밀번호" name="password" id="join_password" class="form-control" /><br>
+            <input type="password" placeholder="비밀번호 확인" id="join_password_chk" class="form-control" /><br>
+            <input type="email" placeholder="이메일" name="email" id="join_email" class="form-control" /><br>
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" id="dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                반려동물 종류
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">개</a></li>
+                    <li><a class="dropdown-item" href="#">고양이</a></li>
+                    <li><a class="dropdown-item" href="#">물고기</a></li>
+                    <li><a class="dropdown-item" href="#">직접 입력하기</a></li>
+                </ul>
+                <input type="text" readonly class="form-label" id="pet_type_form" style="width:100px">
+            </div><br>
+            <input type="text" placeholder="반려동물 이름" name="pet_name" id="pet_name" class="form-control" /><br>
+            <input type="file" name="pet_image" id="choose_image" accept="image/*" onchange="load_file(this)">
+            <img id="pet_image" class="db-placeholder-img img-thumbnail" alt="펫 프로필 사진">
+            <br>
+            <textarea class="form-control" id="pet_introduce" rows="2" placeholder="펫 소개 메세지"></textarea><br>
+            <button class="btn btn-info" type="button" onclick="join()">회원 가입</button>
+        </form>
+    </div>
+{% block content %}
+    {% endblock %}
+</body>
+<script type="text/javascript" src="../../static/js/modal.js"></script>
+<script type="text/javascript" src="../../static/js/validate.js"></script>
+<script>
+    let refresh = 0
+    let id_check = false
+    let file_url
+    function join(){
+        let user_id = $('#join_user_id').val()
+        let password = $('#join_password').val()
+        let password_chk = $('#join_password_chk').val()
+        let email = $('#join_email').val()
+        let pet_type = $('#pet_type_form').val()
+        let pet_name = $('#pet_name').val()
+        let pet_introduce = $('#pet_introduce').val()
+        if([user_id, password, email, pet_type, pet_name].includes('')){
+            modalOpen('칸이 비어있습니다.')
+            return
+        }
+        if(password != password_chk){
+            modalOpen('비밀번호가 일치하지 않습니다.')
+            return
+        }
+        if(!id_check){
+            modalOpen('아이디 중복체크가 필요합니다.')
+            return
+        }
+        $.ajax({
+            type : "POST",
+            url : "/api/singup",
+            data : {'id_give': user_id, 'pw_give': password, 'em_give': email,
+                'pet_type_give': pet_type, 'pet_name_give': pet_name, 'pet_introduce_give': pet_introduce,'pet_image_src': file_url},
+            success : function (response){
+                let result = response['msg']
+                if(result === 'success'){
+                    refresh = 1
+                    modalOpen('회원가입 완료')
+                    id_check = false
+                }
+            }
+        })
+    }
+    $(document).on('click', '#user_id_check_btn', function(){
+        let user_id = $('#join_user_id').val()
+        check_id(user_id, '/api/checkid')
+    })
+    let changed = document.querySelectorAll(".dropdown-item")
+    changed.forEach(element=>{
+        element.addEventListener("click", e=>{
+            let pet_name = e.target.innerHTML
+            let pet_type = $('#pet_type_form')
+            if(pet_name === '직접 입력하기'){
+                pet_type.attr('readonly', false)
+                pet_type.val('')
+                pet_type.attr('placeholder', '입력하세요')
+                pet_type.focus()
+            } else{
+                pet_type.attr('readonly', true)
+                pet_type.val(pet_name)
+            }
+
+        })
+    })
+    function load_file(input){
+        let file = input.files[0]
+        if(file == null){
+            file_url = 'no image'
+        } else{
+            file_url = window.URL.createObjectURL(file)
+            $('#pet_image').attr('src', file_url)
+
+        }
+    }
+</script>
+</html>
