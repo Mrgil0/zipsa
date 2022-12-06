@@ -1,5 +1,6 @@
+import os
+import pymysql
 from flask import Flask, render_template, request, jsonify, session
-import pymysql, os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -100,7 +101,6 @@ def login_user(user_id, password):
     return 'success'
 
 
-
 def insert_post(user_id, post_content, post_date):
     db = set_db_password()
     curs = db.cursor()
@@ -136,7 +136,7 @@ def logout():
 
 @app.route('/page/signup', methods=["GET"])
 def get_signup():
-    return render_template('/components/modal.html', component_name='singup')
+    return render_template('/components/modal.html', component_name='signup')
 
 
 @app.route('/page/profile', methods=["GET"])
@@ -155,7 +155,7 @@ def read_user():
         return jsonify({'msg': 'fail'})
 
 
-@app.route('/api/singup', methods=["POST"])
+@app.route('/api/signup', methods=["POST"])
 def login_post():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
