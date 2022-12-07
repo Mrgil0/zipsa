@@ -7,7 +7,8 @@ app.secret_key = os.urandom(24)
 
 
 def set_db_password():
-    db = pymysql.connect(host='localhost', user='lsi', db='zipsa', password='0000', charset='utf8') # password를 각자 db의 비밀번호에 맞게 변경
+    db = pymysql.connect(host='localhost', user='lsi', db='zipsa', password='0000',
+                         charset='utf8')  # password를 각자 db의 비밀번호에 맞게 변경
     return db
 
 
@@ -55,7 +56,7 @@ def update_post(post_content, post_date, post_id):
     db.close()
 
 
-def insert_user(user_id, password,email):
+def insert_user(user_id, password, email):
     db = set_db_password()
     curs = db.cursor()
 
@@ -77,7 +78,7 @@ def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
     db.close()
 
 
-def find_user(user_id):
+def find_user_id(user_id):
     db = set_db_password()
     curs = db.cursor()
 
@@ -86,6 +87,23 @@ def find_user(user_id):
     curs.execute(sql, record)
     try:
         result = list(list(curs.fetchone()))[0]
+    except TypeError:
+        print('타입 에러')
+        return 'fail'
+    db.commit()
+    db.close()
+    return result
+
+
+def find_user_pw(user_id, password):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select password from user where user_id = %s and password = %s"
+    record = (user_id, password)
+    curs.execute(sql, record)
+    try:
+        result = list(list(curs.fetchone()))
     except TypeError:
         print('타입 에러')
         return 'fail'
@@ -140,16 +158,23 @@ def insert_post(user_id, post_content, post_date):
     db.close()
 
 
+def get_session_id():
+    user_id = session['user_id']
+    return user_id
+
+
 # route
 @app.route('/')
 def index():
     post = read_posts()
     if session.get('logged_in'):
-        profile_image = read_pet_image(session['user_id'])
+        user_id = get_session_id()
+        profile_image = read_pet_image(user_id)
         return render_template('/components/modal.html', status='login', pet_image=profile_image,
-                               posts=post, len=len(post), page="home", user_id=session['user_id'])
+                               posts=post, len=len(post), page="home", user_id=user_id)
     else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='')
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
+                               user_id='')
 
 
 @app.route('/page/login', methods=["GET"])
@@ -159,8 +184,9 @@ def get_login():
 
 @app.route('/page/logout', methods=["GET"])
 def logout():
+    post = read_posts()
     session['logged_in'] = False
-    return render_template('/components/modal.html', status='logout', page="home")
+    return render_template('/components/modal.html', status='logout', page="home", posts=post, len=len(post))
 
 
 @app.route('/page/signup', methods=["GET"])
@@ -168,9 +194,30 @@ def get_signup():
     return render_template('/components/modal.html', status='signup')
 
 
-@app.route('/page/profile', methods=["GET"])
-def read_my_profile():
-    return render_template('/components/modal.html', page='profile')
+@app.route('/page/profile/user', methods=["GET"])
+def read_my_profile_user():
+    if request.args.get('result') == 'true':
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True)
+    else:
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False)
+
+
+@app.route('/page/profile/post', methods=["GET"])
+def read_my_profile_post():
+    return render_template('/components/modal.html', page='profile/post', toggle='post')
+
+
+@app.route('/posts/search', methods=["GET"])
+def search_posts():
+    search_receive = request.args.get('search_input')
+    post = find_posts(search_receive)
+    if session.get('logged_in'):
+        profile_image = read_pet_image(session['user_id'])
+        return render_template('/components/modal.html', status='login', pet_image=profile_image,
+                               posts=post, len=len(post), page="home", user_id=session['user_id'])
+    else:
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
+                               user_id='')
 
 
 @app.route('/api/login', methods=["POST"])
@@ -200,8 +247,17 @@ def login_post():
 
 @app.route('/api/checkid', methods=["POST"])
 def get_id():
-    id_receive = request.form['id_give']
-    result = find_user(id_receive)
+    id_receive = request.form['data_give']
+    result = find_user_id(id_receive)
+    return jsonify({'msg': result})
+
+
+@app.route('/api/checkpw', methods=["POST"])
+def get_password():
+    password_receive = request.form['data_give']
+    user_id = get_session_id()
+    result = find_user_pw(user_id, password_receive)
+    print(result)
     return jsonify({'msg': result})
 
 
@@ -209,7 +265,7 @@ def get_id():
 def insert_posts():
     content_receive = request.form['post_give']
     date_receive = request.form['date_give']
-    user_id = session['user_id']
+    user_id = get_session_id()
     insert_post(user_id, content_receive, date_receive)
     return jsonify({'msg': 'success'})
 
@@ -221,19 +277,6 @@ def modify_posts():
     id_receive = request.form['id_give']
     update_post(content_receive, date_receive, id_receive)
     return jsonify({'msg': 'success'})
-
-
-@app.route('/posts/search', methods=["GET"])
-def search_posts():
-    search_receive = request.args.get('search_input')
-    post = find_posts(search_receive)
-    print(post)
-    if session.get('logged_in'):
-        profile_image = read_pet_image(session['user_id'])
-        return render_template('/components/modal.html', status='login', pet_image=profile_image,
-                               posts=post, len=len(post), page="home", user_id=session['user_id'])
-    else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='')
 
 
 # 서버실행

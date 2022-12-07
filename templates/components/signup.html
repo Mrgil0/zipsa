@@ -99,7 +99,7 @@
     }
     $(document).on('click', '#user_id_check_btn', function(){
         let user_id = $('#join_user_id').val()
-        check_id(user_id, '/api/checkid')
+        check_id(user_id, '/api/checkid', "아이디")
     })
     let changed = document.querySelectorAll(".dropdown-item")
     changed.forEach(element=>{
