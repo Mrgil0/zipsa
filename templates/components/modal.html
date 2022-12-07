@@ -4,8 +4,10 @@
 {% extends '/components/login.html' %}
 {% elif status == 'signup' %}
 {% extends '/components/signup.html' %}
-{% elif page == 'profile' %}
-{% extends '/components/profile.html' %}
+{% elif page == 'profile/user' %}
+{% extends '/components/profile_user.html' %}
+{% elif page == 'profile/post' %}
+{% extends '/components/profile_post.html' %}
 {% endif %}
 
 {% block content %}
