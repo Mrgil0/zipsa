@@ -78,6 +78,28 @@ def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
     db.close()
 
 
+def insert_post(user_id, post_content, post_date):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "insert into post values (null, %s, %s,%s)"
+    record = (user_id, post_content, post_date)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
+
+
+def insert_reply(user_id, reply_content, reply_date):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "insert into reply values (null, %s, %s,%s)"
+    record = (user_id, reply_content, reply_date)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
+
+
 def find_user_id(user_id):
     db = set_db_password()
     curs = db.cursor()
@@ -145,17 +167,6 @@ def login_user(user_id, password):
     db.commit()
     db.close()
     return 'success'
-
-
-def insert_post(user_id, post_content, post_date):
-    db = set_db_password()
-    curs = db.cursor()
-    print(post_date)
-    sql = "insert into post values (null, %s, %s,%s)"
-    record = (user_id, post_content, post_date)
-    curs.execute(sql, record)
-    db.commit()
-    db.close()
 
 
 def get_session_id():
@@ -270,6 +281,15 @@ def insert_posts():
     return jsonify({'msg': 'success'})
 
 
+@app.route('/api/replies', methods=["POST"])
+def insert_replies():
+    reply_receive = request.form['reply_give']
+    date_receive = request.form['date_give']
+    user_id = get_session_id()
+    insert_reply(user_id, reply_receive, date_receive)
+    return jsonify({'msg': 'success'})
+
+
 @app.route('/api/posts', methods=["PUT"])
 def modify_posts():
     content_receive = request.form['post_give']
@@ -277,6 +297,8 @@ def modify_posts():
     id_receive = request.form['id_give']
     update_post(content_receive, date_receive, id_receive)
     return jsonify({'msg': 'success'})
+
+
 
 
 # 서버실행
