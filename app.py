@@ -1,4 +1,6 @@
 import os
+from math import ceil
+
 import pymysql
 from flask import Flask, render_template, request, jsonify, session
 
@@ -36,6 +38,40 @@ def read_posts():
 
     sql = "select * from post"
     curs.execute(sql)
+    result = curs.fetchall()
+    if len(result) == 0:
+        return ''
+    db.commit()
+    db.close()
+    return result
+
+
+def read_my_posts(user_id, cur_page):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from post where user_id=%s LIMIT %s, %s"
+    try:
+        min_num = (int(cur_page)-1) * 5
+    except TypeError:
+        min_num = 0
+    record = (user_id, min_num, int(cur_page)*5)
+    curs.execute(sql, record)
+    result = curs.fetchall()
+    if len(result) == 0:
+        return ''
+    db.commit()
+    db.close()
+    print(result)
+    return result
+
+
+def read_my_all_posts(user_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from post where user_id=%s"
+    curs.execute(sql, user_id)
     result = curs.fetchall()
     if len(result) == 0:
         return ''
@@ -219,6 +255,13 @@ def get_session_id():
     return user_id
 
 
+def get_page_num(post):
+    if len(post) == 0:
+        return
+    page_num = len(post) / 5
+    return page_num
+
+
 # route
 @app.route('/')
 def index():
@@ -226,6 +269,7 @@ def index():
     if session.get('logged_in'):
         user_id = get_session_id()
         profile_image = read_pet_image(user_id)
+        print(post)
         return render_template('/components/modal.html', status='login', pet_image=profile_image,
                                posts=post, len=len(post), page="home", user_id=user_id)
     else:
@@ -259,12 +303,17 @@ def read_my_profile_user():
     if request.args.get('result') == 'true':
         return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True, users=user, pets=pet, status='login', pet_image=profile_image,)
     else:
-        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False, status='login', pet_image=profile_image,)
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False, status='login', pet_image=profile_image)
 
 
 @app.route('/page/profile/post', methods=["GET"])
 def read_my_profile_post():
-    return render_template('/components/modal.html', page='profile/post', toggle='post')
+    cur_page = request.args.get('page')
+    user_id = get_session_id()
+    cur_post = read_my_posts(user_id, cur_page)
+    posts = read_my_all_posts(user_id)
+    max_page = ceil(get_page_num(posts))
+    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, len=len(cur_post), max_page=max_page, cur_page=cur_page)
 
 
 @app.route('/posts/search', methods=["GET"])
@@ -331,7 +380,6 @@ def get_password():
     password_receive = request.form['data_give']
     user_id = get_session_id()
     result = find_user_pw(user_id, password_receive)
-    print(result)
     return jsonify({'msg': result})
 
 
