@@ -39,10 +39,55 @@ def read_posts():
     result = curs.fetchall()
     if len(result) == 0:
         return ''
-    print(result)
     db.commit()
     db.close()
     return result
+
+
+def read_user(user_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from user where user_id = %s"
+    curs.execute(sql, user_id)
+    result = curs.fetchall()
+    db.commit()
+    db.close()
+    return result
+
+
+def read_pet(user_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from pet where user_id = %s"
+    curs.execute(sql, user_id)
+    result = curs.fetchall()
+    db.commit()
+    db.close()
+    return result
+
+
+def update_user(user_id, password, email):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "update user set password=%s, email=%s where user_id=%s"
+    record = (password, email, user_id)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
+
+
+def update_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "update pet set pet_type=%s, pet_name=%s, pet_introduce=%s, pet_image=%s where user_id=%s"
+    record = (pet_type, pet_name, pet_introduce, pet_image, user_id)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
 
 
 def update_post(post_content, post_date, post_id):
@@ -151,7 +196,7 @@ def find_posts(text):
     return result
 
 
-def login_user(user_id, password):
+def select_user(user_id, password):
     db = set_db_password()
     curs = db.cursor()
 
@@ -207,10 +252,14 @@ def get_signup():
 
 @app.route('/page/profile/user', methods=["GET"])
 def read_my_profile_user():
+    user_id = get_session_id()
+    user = read_user(user_id)
+    pet = read_pet(user_id)
+    profile_image = read_pet_image(user_id)
     if request.args.get('result') == 'true':
-        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True)
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True, users=user, pets=pet, status='login', pet_image=profile_image,)
     else:
-        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False)
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False, status='login', pet_image=profile_image,)
 
 
 @app.route('/page/profile/post', methods=["GET"])
@@ -231,18 +280,18 @@ def search_posts():
                                user_id='')
 
 
-@app.route('/api/login', methods=["POST"])
-def read_user():
+@app.route('/api/user/login', methods=["POST"])
+def login_user():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
-    result = login_user(id_receive, pw_receive)
+    result = select_user(id_receive, pw_receive)
     if result == 'success':
         return jsonify({'msg': 'success'})
     else:
         return jsonify({'msg': 'fail'})
 
 
-@app.route('/api/signup', methods=["POST"])
+@app.route('/api/user/signup', methods=["POST"])
 def login_post():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -253,6 +302,20 @@ def login_post():
     pet_image_receive = request.form['pet_image_src']
     insert_user(id_receive, pw_receive, em_receive)
     insert_pet(id_receive, pet_type_receive, pet_name_receive, pet_introduce_receive, pet_image_receive)
+    return jsonify({'msg': 'success'})
+
+
+@app.route('/api/user/modify', methods=["PUT"])
+def modify_user():
+    user_id = get_session_id()
+    pw_receive = request.form['pw_give']
+    em_receive = request.form['em_give']
+    pet_type_receive = request.form['pet_type_give']
+    pet_name_receive = request.form['pet_name_give']
+    pet_introduce_receive = request.form['pet_introduce_give']
+    pet_image_receive = request.form['pet_image_src']
+    update_user(user_id, pw_receive, em_receive)
+    update_pet(user_id, pet_type_receive, pet_name_receive, pet_introduce_receive, pet_image_receive)
     return jsonify({'msg': 'success'})
 
 

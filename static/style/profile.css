@@ -1,0 +1,39 @@
+#join_form{
+  position: sticky;
+  left:50%;
+  transform: translate(-50%);
+  width: 500px;
+  height: auto;
+}
+#form_input{
+  display: flex;
+  flex-direction: column;
+}
+#form_chk{
+  display: flex;
+  justify-content: center;
+  margin-top:10px;
+}
+.form_title{
+  text-align: center;
+}
+#join_user_id{
+  width:200px
+}
+#user_id_check_btn{
+  float:right;
+  height:100%;
+  margin-left: 10px;
+}
+.form_button button{
+  float:right
+}
+#join_button{
+  margin-left: 5px;
+}
+#chk_input{
+    width:200px;
+}
+#modify_id{
+  width:60%
+}
