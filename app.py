@@ -44,7 +44,18 @@ def read_posts():
     return result
 
 
-def insert_user(user_id, password, email):
+def update_post(post_content, post_date, post_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "update post set post_content=%s, post_date=%s where post_id=%s"
+    record = (post_content, post_date, post_id)
+    curs.execute(sql, record)
+    db.commit()
+    db.close()
+
+
+def insert_user(user_id, password,email):
     db = set_db_password()
     curs = db.cursor()
 
@@ -83,6 +94,23 @@ def find_user(user_id):
     return result
 
 
+def find_posts(text):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from post where user_id like %s or post_content like %s"
+    record = ('%' + text + '%', '%' + text + '%')
+    curs.execute(sql, record)
+    try:
+        result = curs.fetchall()
+    except TypeError:
+        print('타입 에러')
+        return 'fail'
+    db.commit()
+    db.close()
+    return result
+
+
 def login_user(user_id, password):
     db = set_db_password()
     curs = db.cursor()
@@ -105,7 +133,7 @@ def insert_post(user_id, post_content, post_date):
     db = set_db_password()
     curs = db.cursor()
     print(post_date)
-    sql = "insert into post values (null,%s, %s,%s)"
+    sql = "insert into post values (null, %s, %s,%s)"
     record = (user_id, post_content, post_date)
     curs.execute(sql, record)
     db.commit()
@@ -118,30 +146,31 @@ def index():
     post = read_posts()
     if session.get('logged_in'):
         profile_image = read_pet_image(session['user_id'])
-        return render_template('/components/modal.html', component_name='login', pet_image=profile_image, posts=post, len=len(post), index="home")
+        return render_template('/components/modal.html', status='login', pet_image=profile_image,
+                               posts=post, len=len(post), page="home", user_id=session['user_id'])
     else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), index="home")
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='')
 
 
 @app.route('/page/login', methods=["GET"])
 def get_login():
-    return render_template('/components/modal.html', component_name='logout')
+    return render_template('/components/modal.html', status='logout')
 
 
 @app.route('/page/logout', methods=["GET"])
 def logout():
     session['logged_in'] = False
-    return render_template('index.html', component_name='logout')
+    return render_template('/components/modal.html', status='logout', page="home")
 
 
 @app.route('/page/signup', methods=["GET"])
 def get_signup():
-    return render_template('/components/modal.html', component_name='signup')
+    return render_template('/components/modal.html', status='signup')
 
 
 @app.route('/page/profile', methods=["GET"])
 def read_my_profile():
-    return render_template('/components/profile.html')
+    return render_template('/components/modal.html', page='profile')
 
 
 @app.route('/api/login', methods=["POST"])
@@ -183,6 +212,29 @@ def insert_posts():
     user_id = session['user_id']
     insert_post(user_id, content_receive, date_receive)
     return jsonify({'msg': 'success'})
+
+
+@app.route('/api/posts', methods=["PUT"])
+def modify_posts():
+    content_receive = request.form['post_give']
+    date_receive = request.form['date_give']
+    id_receive = request.form['id_give']
+    update_post(content_receive, date_receive, id_receive)
+    return jsonify({'msg': 'success'})
+
+
+@app.route('/posts/search', methods=["GET"])
+def search_posts():
+    search_receive = request.args.get('search_input')
+    post = find_posts(search_receive)
+    print(post)
+    if session.get('logged_in'):
+        profile_image = read_pet_image(session['user_id'])
+        return render_template('/components/modal.html', status='login', pet_image=profile_image,
+                               posts=post, len=len(post), page="home", user_id=session['user_id'])
+    else:
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='')
+
 
 # 서버실행
 if __name__ == '__main__':
