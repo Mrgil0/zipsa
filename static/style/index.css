@@ -3,32 +3,6 @@
     width: 120px;
     height: 40px;
 }
-.container{
-    display: flex;
-    justify-content: space-between;
-    padding: 13px 5%;
-}
-.left-sidebar{
-    background: #cbdffa;
-    flex-basis: 25%;
-    position: sticky;
-    top: 70px;
-    align-self: flex-start;
-    height: 100vh;
-}
-.right-sidebar{
-    background: #cbdffa;
-    flex-basis: 25%;
-    position: sticky;
-    top: 70px;
-    align-self: flex-start;
-    height: 100vh;
-}
-.event{
-    display: flex;
-    font-size: 14px;
-    margin-bottom: 20px;
-}
 .main-content{
     flex-basis: 38%;
 }
@@ -146,4 +120,13 @@
     height: 40px;
     font-size: 16px;
     margin-left: auto;
+}
+.input_group{
+    display: inline-block;
+    margin: 5px auto;
+    float:right;
+}
+.form-control{
+    width:100%;
+    height:auto
 }

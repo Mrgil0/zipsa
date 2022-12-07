@@ -16,6 +16,10 @@
 <body>
 {% include "components/header.html" %}
   <!-- Sign Up -->
+<div class="main_container">
+        <!-----------------left-sidebar-------------------->
+    <div class="left-sidebar">
+    </div>
     <div class="container" id="join_form">
         <form class="form">
             <h2 class="form_title">회원 가입</h2>
@@ -39,13 +43,16 @@
                 <input type="text" readonly class="form-label" id="pet_type_form" style="width:100px">
             </div><br>
             <input type="text" placeholder="반려동물 이름" name="pet_name" id="pet_name" class="form-control" /><br>
-            <input type="file" name="pet_image" id="choose_image" accept="image/*" onchange="load_file(this)">
+            <input type="file" name="pet_image" id="choose_image" accept="image/*">
             <img id="pet_image" class="db-placeholder-img img-thumbnail" alt="펫 프로필 사진">
             <br>
             <textarea class="form-control" id="pet_introduce" rows="2" placeholder="펫 소개 메세지"></textarea><br>
             <button class="btn btn-info" type="button" onclick="join()">회원 가입</button>
         </form>
     </div>
+    <div class="right-sidebar">
+    </div>
+</div>
 {% block content %}
     {% endblock %}
 </body>
@@ -63,7 +70,7 @@
         let pet_type = $('#pet_type_form').val()
         let pet_name = $('#pet_name').val()
         let pet_introduce = $('#pet_introduce').val()
-        if([user_id, password, email, pet_type, pet_name].includes('')){
+        if([user_id, password, email, pet_type, pet_name, pet_introduce].includes('')){
             modalOpen('칸이 비어있습니다.')
             return
         }
@@ -111,8 +118,8 @@
 
         })
     })
-    function load_file(input){
-        let file = input.files[0]
+     $('#choose_image').change(function(e){
+        let file =  e.target.files[0]
         if(file == null){
             file_url = 'no image'
         } else{
@@ -120,6 +127,6 @@
             $('#pet_image').attr('src', file_url)
 
         }
-    }
+    })
 </script>
 </html>
