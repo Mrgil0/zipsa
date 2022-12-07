@@ -5,6 +5,7 @@
     <link href="../../static/style/header.css" rel="stylesheet">
     <link href="../../static/style/index.css" rel="stylesheet">
     <link href="../../static/style/modal.css" rel="stylesheet">
+    <link href="../../static/style/profile.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
@@ -24,19 +25,23 @@
     <div class="container" id="join_form">
         <h2 class="form_title" style="margin-top:20px">회원 정보 수정</h2>
         {% if password_chk == false %}
-        <form>
-            <input type="text" name="password" id="chk_input" class="form-control" style="display: inline-block; width:20%" placeholder="비밀번호 입력하세요."/>
+        <form class="form" id="form_chk">
+            <input type="text" name="password" id="chk_input" class="form-control" style="display: inline-block;" placeholder="비밀번호 입력하세요."/>
             <button type="button" class="btn btn-primary" id="password_chk_button">확인</button>
         </form>
         {% else %}
-        <form class="form">
+        <br>
+        <form class="form" id="form_input">
             <div>
-                <input type="text" name="user_id" id="join_user_id" class="form-control" style="display: inline-block" placeholder="아이디"/>
-                <button type="button" class="btn btn-primary mb-3" id="user_id_check_btn">확인</button>
-            </div>
-            <input type="password" placeholder="비밀번호" name="password" id="join_password" class="form-control" /><br>
-            <input type="password" placeholder="비밀번호 확인" id="join_password_chk" class="form-control" /><br>
-            <input type="email" placeholder="이메일" name="email" id="join_email" class="form-control" /><br>
+                <lebel for="modify_id" class="form-label">아이디</lebel>
+                <input type="text" name="user_id" id="modify_id" class="form-control" style="display: inline-block" value="{{users[0][0]}}" readonly placeholder="아이디"/>
+                <button type="button" class="btn btn-outline-info">수정불가</button>
+            </div><br>
+            <lebel for="modify_password" class="form-label">비밀번호</lebel>
+            <input type="password" placeholder="비밀번호" name="password" id="modify_password" class="form-control" value="{{users[0][1]}}"/><br>
+            <input type="password" placeholder="비밀번호 확인" id="modify_password_chk" class="form-control" /><br>
+            <lebel for="modify_email" class="form-label">이메일</lebel>
+            <input type="email" placeholder="이메일" name="email" id="modify_email" class="form-control" value="{{users[0][2]}}"/><br>
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" id="dropdown_toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                 반려동물 종류
@@ -47,16 +52,22 @@
                     <li><a class="dropdown-item" href="#">물고기</a></li>
                     <li><a class="dropdown-item" href="#">직접 입력하기</a></li>
                 </ul>
-                <input type="text" readonly class="form-label" id="pet_type_form" style="width:100px">
+                <lebel for="pet_type_form" class="form-label">펫 종류</lebel>
+                <input type="text" readonly class="form-label" id="pet_type_form" style="width:100px" value="{{pets[0][1]}}">
             </div><br>
-            <input type="text" placeholder="반려동물 이름" name="pet_name" id="pet_name" class="form-control" /><br>
+            <lebel for="modify_pet_name" class="form-label">펫 이름</lebel>
+            <input type="text" placeholder="반려동물 이름" name="pet_name" id="modify_pet_name" class="form-control" value="{{pets[0][2]}}"/><br>
             <input type="file" name="pet_image" id="choose_image" accept="image/*">
             <img id="pet_image" class="db-placeholder-img img-thumbnail" alt="펫 프로필 사진">
             <br>
-            <textarea class="form-control" id="pet_introduce" rows="2" placeholder="펫 소개 메세지"></textarea><br>
-            <button class="btn btn-info" type="button" onclick="join()">회원 가입</button>
+            <lebel for="modify_pet_introduce" class="form-label">펫 소개글</lebel>
+            <textarea class="form-control" id="modify_pet_introduce" rows="2" placeholder="펫 소개 메세지">{{pets[0][3]}}</textarea><br>
+            <button class="btn btn-info" type="button" onclick="modify_user()">수정완료</button>
         </form>
         {% endif %}
+    </div>
+    <div class="right-sidebar">
+
     </div>
 </div>
 {% block content %}
