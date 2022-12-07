@@ -70,29 +70,6 @@
                     </div>
                 </div>
                 <textarea class="form-control" id="{{posts[i][0]}}" readonly>{{posts[i][2]}}</textarea>
-                <button type="button" id="reply_toggle" class="{{posts[i][0]}}">▼</button>
-                <div class="reply_container{{posts[i][0]}}" style="display:none">
-                    <div class="user-profile">
-                        <img src="../static/images/user.png">
-                        <div>
-                            <p>아이디</p>
-                            <span>날짜</span>
-                        </div>
-                        <input type="text" id="reply_content_box" class="form-control" style="display: inline-block" readonly value="답글입니다"/>
-                    </div>
-                    <hr>
-                    <div class="reply_input">
-                        <div class="user-profile" styler="display:inline-block">
-                            <img src="../static/images/user.png">
-                                <div>
-                                    <p>아이디</p>
-                                    <span>날짜</span>
-                                </div>
-                            <input class="form-control" id="reply_text${idx}" name="replyText" type="text" placeholder="답글">
-                            <button class="btn btn-primary btn-sm" name="{{posts[i][0]}}" id="replyBtn" type="button">작성</button>
-                        </div>
-                    </div>
-                </div>
                 {% if user_id == posts[i][1] %}
                 <div class="input_group">
                     <button type="button" class="btn btn-outline-success" id="confirm_button{{posts[i][0]}}" onclick="modify_check()" hidden>확인</button>
@@ -100,6 +77,24 @@
                     <button type="button" name="{{posts[i][0]}}" class="btn btn-outline-danger" id="delete_button">삭제</button>
                 </div>
                 {% endif %}
+                <button type="button" id="reply_toggle" class="{{posts[i][0]}}">▼</button>
+                <div class="reply_container{{posts[i][0]}}" style="display:none">
+
+                    <hr>
+                    {% if status == 'login' %}
+                    <div class="reply_input">
+                        <div class="user-profile" styler="display:inline-block">
+                            <img src="../static/images/user.png">
+                                <div>
+                                    <p>아이디</p>
+                                    <span>날짜</span>
+                                </div>
+                            <input class="form-control" id="reply_text{{posts[i][0]}}" name="replyText" type="text" placeholder="답글">
+                            <button class="btn btn-primary btn-sm" name="{{posts[i][0]}}" id="reply_button" type="button">작성</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
             </div>
             {% endfor %}
 
