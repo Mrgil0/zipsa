@@ -1,5 +1,6 @@
+import os
+import pymysql
 from flask import Flask, render_template, request, jsonify, session
-import pymysql, os
 
 app = Flask(__name__)
 app.secret_key = os.urandom(24)
@@ -183,7 +184,7 @@ def read_user():
         return jsonify({'msg': 'fail'})
 
 
-@app.route('/api/singup', methods=["POST"])
+@app.route('/api/signup', methods=["POST"])
 def login_post():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
