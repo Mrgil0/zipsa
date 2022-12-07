@@ -51,7 +51,9 @@
                 <div class="post-input-container">
                     <textarea rows="3" placeholder="오늘의 반려동물 자랑을 해보세요" id="post_area"></textarea>
                     <div class="add-post-links">
-                        <a href="#"><img src="../static/images/user.png"> Photo</a>
+                        <div id="image_input_box">
+                            <input class="form-control form-control-sm" type="file" id="form_image" accept="image/*">
+                        </div>
                         <button type="button" class="btn btn-outline-info" id="post_button">작성</button>
                     </div>
                 </div>
