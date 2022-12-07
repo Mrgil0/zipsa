@@ -3,7 +3,7 @@
     justify-content: space-between;
 }
 .left-sidebar{
-    background: #cbdffa;
+    background: #ffffff;
     flex-basis: 25%;
     position: sticky;
     top: 70px;
@@ -11,7 +11,7 @@
     height: 100vh;
 }
 .right-sidebar{
-    background: #cbdffa;
+    background: #ffffff;
     flex-basis: 25%;
     position: sticky;
     top: 70px;
@@ -19,5 +19,5 @@
     height: 100vh;
 }
 header{
-    background-color: #adb5bd;
+    background-color: #ffffff;
 }
