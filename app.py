@@ -38,7 +38,7 @@ def read_posts():
     curs.execute(sql)
     result = curs.fetchall()
     if len(result) == 0:
-        return 'empty'
+        return ''
     print(result)
     db.commit()
     db.close()
