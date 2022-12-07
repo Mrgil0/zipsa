@@ -104,8 +104,10 @@
 }
 
 .post-container{
+    display:inline-block;
     width: 100%;
-    background: #fff;
+    height: fit-content;
+    background: #adb5bd;
     border-radius: 6px;
     padding: 20px;
     color: #626262;
@@ -172,4 +174,24 @@ footer {
     text-transform: uppercase;
     opacity: .4;
     font-weight: 200;
+}
+.reply_container{
+    margin-left: 40px;
+}
+#reply_content_box{
+    width: 60%;
+    float:left;
+    margin-left: 10px;
+}
+.reply_input{
+    width:100%;
+    float:right
+}
+.reply_input input{
+    display: inline-block;
+    width: 60%;
+    margin-left: 10px;
+}
+.reply_input button{
+    margin-left: 10px;
 }
