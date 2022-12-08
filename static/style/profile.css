@@ -3,7 +3,7 @@
   left:50%;
   transform: translate(-50%);
   width: 500px;
-  height: auto;
+  height: 100%;
 }
 #form_input{
   display: flex;
@@ -13,6 +13,9 @@
   display: flex;
   justify-content: center;
   margin-top:10px;
+}
+#form_chk button{
+  margin-left:10px;
 }
 .form_title{
   text-align: center;
@@ -34,6 +37,19 @@
 #chk_input{
     width:200px;
 }
-#modify_id{
-  width:60%
+#id_box{
+  display: flex;
+  justify-content: space-between;
+}
+#id_box button{
+  margin-left: 10px;
+  font-size:15px;
+  background-color: #6397fc;
+  color: white;
+}
+#id_box input, #id_box button{
+  height:38px
+}
+#id_box input{
+  width:350px;
 }
