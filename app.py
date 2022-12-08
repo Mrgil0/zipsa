@@ -204,7 +204,7 @@ def find_user_id(user_id):
         result = list(list(curs.fetchone()))[0]
     except TypeError:
         print('타입 에러')
-        return 'fail'
+        return 'success'
     db.commit()
     db.close()
     return result
@@ -281,8 +281,7 @@ def index():
     if session.get('logged_in'):
         user_id = get_session_id()
         profile_image = read_pet_image(user_id)
-        return render_template('/components/modal.html', status='login', pet_image=profile_image,
-                               posts=post, len=len(post), page="home", user_id=user_id)
+        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user_id=user_id)
     else:
         return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
                                user_id='')
@@ -340,7 +339,7 @@ def search_posts():
                                user_id='')
 
 
-@app.route('/api/user/login', methods=["POST"])
+@app.route('/api/users/login', methods=["POST"])
 def login_user():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
@@ -351,7 +350,7 @@ def login_user():
         return jsonify({'msg': 'fail'})
 
 
-@app.route('/api/user/signup', methods=["POST"])
+@app.route('/api/users/signup', methods=["POST"])
 def login_post():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -403,16 +402,6 @@ def insert_posts():
     insert_post(user_id, content_receive, date_receive, file_receive)
 
     return jsonify({'msg': 'success'})
-
-
-@app.route('/api/upload', methods=["POST"])
-def insert_image():
-    file_receive = request.files['file']
-    post = read_posts()
-    user_id = get_session_id()
-    profile_image = read_pet_image(user_id)
-    return render_template('/components/modal.html', status='login', pet_image=profile_image,
-                               posts=post, len=len(post), page="home", user_id=user_id)
 
 
 @app.route('/api/replies', methods=["POST"])

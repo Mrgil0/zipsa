@@ -11,7 +11,7 @@ $('#post_button').click(function(e){
         url: '/api/posts',
         data: {'post_give': post_area,'date_give': date, "file_give": file_src},
         success: function(response){
-            $('#upload_form').submit()
+            window.location.reload()
         },
         error: function(response){
 

@@ -47,7 +47,7 @@
         }
         $.ajax({
             type : "POST",
-            url : "/api/user/login",
+            url : "/api/users/login",
             data : {'id_give': user_id, 'pw_give': password},
             success : function (response){
                 let result = response['msg']
