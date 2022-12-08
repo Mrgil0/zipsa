@@ -40,16 +40,21 @@
                 </div>
             </div>
             <div class="write-post-container">
+                {% if status == 'login' %}
                 <div class="user-profile">
                     <img src="../static/images/user.png">
                     <div>
-                        {% if status == 'login' %}
-                        <p>{{user_id}}</p>
-                        {% else %}
-                        <p>아이디</p>
-                        {% endif %}
+                        <p>{{user[0][0]}}</p>
                     </div>
                 </div>
+                {% else %}
+                <div class="user-profile">
+                    <img src="../static/images/user.png">
+                    <div>
+                        <p>아이디</p>
+                    </div>
+                </div>
+                {% endif %}
 
                 <div class="post-input-container">
                     {% if status == 'login' %}
