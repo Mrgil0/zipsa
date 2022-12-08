@@ -62,3 +62,21 @@ changed.forEach(element=>{
      file_url = window.URL.createObjectURL(file[0])
     preview(file[0], '#image_input_box')
 })
+
+
+$(function(){
+    $('#join_password').keyup(function(){
+      $('#chkNotice').html('');
+    });
+
+    $('#join_password_chk').keyup(function(){
+        if($('#join_password').val() != $('#join_password_chk').val()){
+          $('#chkNotice').html('비밀번호 일치하지 않음');
+          $('#chkNotice').attr('color', '#f82a2aa3');
+        } else{
+          $('#chkNotice').html('비밀번호 일치함');
+          $('#chkNotice').attr('color', '#199894b3');
+        }
+
+    });
+});
