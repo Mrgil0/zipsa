@@ -36,11 +36,26 @@ def read_posts():
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "select * from post"
+    sql = "select * from post ORDER BY post_date desc"
     curs.execute(sql)
     result = curs.fetchall()
     if len(result) == 0:
         return ''
+    db.commit()
+    db.close()
+    return result
+
+
+def read_replies():
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from reply"
+    curs.execute(sql)
+    result = list(curs.fetchall())
+    if len(result) == 0:
+        return ''
+    print(result)
     db.commit()
     db.close()
     return result
@@ -62,7 +77,20 @@ def read_my_posts(user_id, cur_page):
         return ''
     db.commit()
     db.close()
-    print(result)
+    return result
+
+
+def read_one_post(post_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from post where post_id=%s"
+    curs.execute(sql, post_id)
+    result = curs.fetchall()
+    if len(result) == 0:
+        return ''
+    db.commit()
+    db.close()
     return result
 
 
@@ -84,7 +112,7 @@ def read_user(user_id):
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "select * from user where user_id = %s"
+    sql = "select u.user_id, pet_image FROM user u, pet p WHERE u.user_id = %s AND u.user_id = p.user_id"
     curs.execute(sql, user_id)
     result = curs.fetchall()
     db.commit()
@@ -162,7 +190,6 @@ def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
 def insert_post(user_id, post_content, post_date):
     db = set_db_password()
     curs = db.cursor()
-
     sql = "insert into post values (null, %s, %s,%s)"
     record = (user_id, post_content, post_date)
     curs.execute(sql, record)
@@ -170,12 +197,12 @@ def insert_post(user_id, post_content, post_date):
     db.close()
 
 
-def insert_reply(user_id, reply_content, reply_date):
+def insert_reply(post_id, user_id, reply_content, reply_date):
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "insert into reply values (null, %s, %s,%s)"
-    record = (user_id, reply_content, reply_date)
+    sql = "insert into reply values (null, %s, %s, %s,%s)"
+    record = (post_id, user_id, reply_content, reply_date)
     curs.execute(sql, record)
     db.commit()
     db.close()
@@ -192,7 +219,7 @@ def find_user_id(user_id):
         result = list(list(curs.fetchone()))[0]
     except TypeError:
         print('타입 에러')
-        return 'fail'
+        return 'success'
     db.commit()
     db.close()
     return result
@@ -275,15 +302,14 @@ def get_page_num(post):
 @app.route('/')
 def index():
     post = read_posts()
+    reply = read_replies()
     if session.get('logged_in'):
         user_id = get_session_id()
+        user = read_user(user_id)
         profile_image = read_pet_image(user_id)
-        print(post)
-        return render_template('/components/modal.html', status='login', pet_image=profile_image,
-                               posts=post, len=len(post), page="home", user_id=user_id)
+        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user=user, replies=reply)
     else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
-                               user_id='')
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='', replies=reply)
 
 
 @app.route('/page/login', methods=["GET"])
@@ -310,7 +336,7 @@ def read_my_profile_user():
     pet = read_pet(user_id)
     profile_image = read_pet_image(user_id)
     if request.args.get('result') == 'true':
-        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True, users=user, pets=pet, status='login', pet_image=profile_image,)
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True, users=user, pets=pet, status='login', pet_image=profile_image)
     else:
         return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False, status='login', pet_image=profile_image)
 
@@ -322,7 +348,8 @@ def read_my_profile_post():
     cur_post = read_my_posts(user_id, cur_page)
     posts = read_my_all_posts(user_id)
     max_page = ceil(get_page_num(posts))
-    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, len=len(cur_post), max_page=max_page, cur_page=cur_page)
+    profile_image = read_pet_image(user_id)
+    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, len=len(cur_post), max_page=max_page, cur_page=cur_page, pet_image=profile_image)
 
 
 @app.route('/posts/search', methods=["GET"])
@@ -338,7 +365,7 @@ def search_posts():
                                user_id='')
 
 
-@app.route('/api/user/login', methods=["POST"])
+@app.route('/api/users/login', methods=["POST"])
 def login_user():
     id_receive = request.form["id_give"]
     pw_receive = request.form["pw_give"]
@@ -349,7 +376,7 @@ def login_user():
         return jsonify({'msg': 'fail'})
 
 
-@app.route('/api/user/signup', methods=["POST"])
+@app.route('/api/users/signup', methods=["POST"])
 def login_post():
     id_receive = request.form['id_give']
     pw_receive = request.form['pw_give']
@@ -398,6 +425,7 @@ def insert_posts():
     date_receive = request.form['date_give']
     user_id = get_session_id()
     insert_post(user_id, content_receive, date_receive)
+
     return jsonify({'msg': 'success'})
 
 
@@ -405,8 +433,9 @@ def insert_posts():
 def insert_replies():
     reply_receive = request.form['reply_give']
     date_receive = request.form['date_give']
+    id_receive = request.form['id_give']
     user_id = get_session_id()
-    insert_reply(user_id, reply_receive, date_receive)
+    insert_reply(id_receive, user_id, reply_receive, date_receive)
     return jsonify({'msg': 'success'})
 
 

@@ -58,7 +58,7 @@
             <lebel for="modify_pet_name" class="form-label">펫 이름</lebel>
             <input type="text" placeholder="반려동물 이름" name="pet_name" id="modify_pet_name" class="form-control" value="{{pets[0][2]}}"/><br>
             <input type="file" name="pet_image" id="choose_image" accept="image/*">
-            <img id="pet_image" class="db-placeholder-img img-thumbnail" alt="펫 프로필 사진">
+            <img id="pet_image" class="db-placeholder-img img-thumbnail" alt="펫 프로필 사진" src="{{pets[0][4]}}">
             <br>
             <lebel for="modify_pet_introduce" class="form-label">펫 소개글</lebel>
             <textarea class="form-control" id="modify_pet_introduce" rows="2" placeholder="펫 소개 메세지">{{pets[0][3]}}</textarea><br>

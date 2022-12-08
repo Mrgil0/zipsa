@@ -23,7 +23,7 @@ function join(){
     }
     $.ajax({
         type : "POST",
-        url : "/api/user/signup",
+        url : "/api/users/signup",
         data : {'id_give': user_id, 'pw_give': password, 'em_give': email,
             'pet_type_give': pet_type, 'pet_name_give': pet_name, 'pet_introduce_give': pet_introduce,'pet_image_src': file_url},
         success : function (response){
@@ -58,12 +58,25 @@ changed.forEach(element=>{
     })
 })
  $('#choose_image').change(function(e){
-    let file =  e.target.files[0]
-    if(file == null){
-        file_url = 'no image'
-    } else{
-        file_url = window.URL.createObjectURL(file)
-        $('#pet_image').attr('src', file_url)
-
-    }
+    let file =  e.target.files
+     file_url = window.URL.createObjectURL(file[0])
+    preview(file[0], '#image_input_box')
 })
+
+
+$(function(){
+    $('#join_password').keyup(function(){
+      $('#chkNotice').html('');
+    });
+
+    $('#join_password_chk').keyup(function(){
+        if($('#join_password').val() != $('#join_password_chk').val()){
+          $('#chkNotice').html('비밀번호 일치하지 않음');
+          $('#chkNotice').attr('color', '#f82a2aa3');
+        } else{
+          $('#chkNotice').html('비밀번호 일치함');
+          $('#chkNotice').attr('color', '#199894b3');
+        }
+
+    });
+});
