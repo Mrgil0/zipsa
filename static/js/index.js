@@ -89,3 +89,23 @@ $('#form_image').change(function(e) {
     preview(file[0], '.image_input_box')
 })
 
+
+
+$(document).on('click','#delete_button', function(){
+    post_id=$(this). attr('name')
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/posts',
+        data: {'post_give': post_id},
+        success: function (result) {
+            if (result['msg'] == 'deleted') {
+               refresh=1
+                modalOpen("deleted")
+            }
+        },
+        error: function (response) {
+
+        }
+    })
+}
+)

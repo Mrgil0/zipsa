@@ -276,6 +276,15 @@ def select_user(user_id, password):
     db.close()
     return 'success'
 
+def delete_post(post_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "delete from post where post_id = (%s)"
+    curs.execute(sql, post_id)
+    db.commit()
+    db.close()
+    return 'success'
 
 def get_session_id():
     user_id = session['user_id']
@@ -439,6 +448,16 @@ def modify_posts():
     return jsonify({'msg': 'success'})
 
 
+@app.route('/api/posts', methods=["DELETE"])
+def remove_post():
+    post_receive = request.form['post_give']
+    delete_post(post_receive)
+    print("삭제되었습니다.")
+    return jsonify({'msg': 'deleted'})
+
+
 # 서버실행
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8000)
+
+
