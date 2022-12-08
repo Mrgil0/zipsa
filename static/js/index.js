@@ -3,13 +3,12 @@ let post_id
 let text_input
 let confirm_button_id
 let date = getFormatDate(new Date())
-let file_src =
 $('#post_button').click(function(e){
     let post_area = $('#post_area').val()
     $.ajax({
         type: 'POST',
         url: '/api/posts',
-        data: {'post_give': post_area,'date_give': date, "file_give": file_src},
+        data: {'post_give': post_area,'date_give': date},
         success: function(response){
             window.location.reload()
         },
@@ -65,7 +64,7 @@ $('#reply_button').click(function(){
     $.ajax({
         type: 'POST',
         url: '/api/replies',
-        data: {'reply_give': reply_text, 'date_give': date},
+        data: {'id_give': id, 'reply_give': reply_text, 'date_give': date},
         success: function(response){
             if(response['msg'] == 'success'){
                 let append_reply = `<div class="user-profile">
@@ -86,7 +85,7 @@ $('#reply_button').click(function(){
     })
 })
 $('#form_image').change(function(e) {
-    file = e.target.files
+    let file = e.target.files
     preview(file[0], '.image_input_box')
 })
 
