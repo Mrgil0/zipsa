@@ -55,7 +55,7 @@
 
                 <div class="post-input-container">
                     {% if status == 'login' %}  <!--유저의 로그인 상태(조건) -->
-                    <textarea rows="3" placeholder="오늘의 반려동물 자랑을 해보세요" id="post_area"></textarea>
+                    <textarea rows="3" placeholder="오늘의 반려동물 자랑을 해보세요" id="post_area" style="min-height:33px" onkeydown="resize(this)" onkeyup="resize(this)"></textarea>
                     <div class="add-post-links">
                         <div id="image_input_box">
                             <form method="post" action="/api/upload" id="upload_form" enctype="multipart/form-data">
@@ -78,7 +78,7 @@
                         <span>{{posts[i][3]}}</span><!--i번째 글의 4번째(글 작성 시간) -->
                     </div>
                 </div>
-                <textarea class="form-control" id="{{posts[i][0]}}" readonly>{{posts[i][2]}}</textarea> <!--i번째 글의 3번째(글 내용) -->
+                <textarea class="form-control" id="{{posts[i][0]}}" readonly style="height:100%;">{{posts[i][2]}}</textarea> <!--i번째 글의 3번째(글 내용) -->
                 {% if user_id == posts[i][1] %}     <!--글쓴 아이디가 로그인한 유저면(조건) -->
                 <div class="input_group">
                     <button type="button" class="btn btn-outline-success" id="confirm_button{{posts[i][0]}}" onclick="modify_check()" hidden>확인</button>

@@ -70,28 +70,33 @@
             </div>
         </div>
         {% endfor %}
-    <nav aria-label="Page navigation example">
-          <ul class="pagination">
-                <li class="page-item">
-                      <a class="page-link" href="#" aria-label="Previous">
-                        <span aria-hidden="true">&laquo;</span>
-                      </a>
-                </li>
-                {% for i in range(0, max_page) %}
-                <li class="page-item"><a class="page-link" href="#">{{i+1}}</a></li>
-                {% endfor %}
-                <li class="page-item">
-                    <a class="page-link" href="#" aria-label="Next">
-                        <span aria-hidden="true">&raquo;</span>
-                    </a>
-                </li>
-          </ul>
-    </nav>
-    </div>
+        {% if posts|length != 0 %}
+        <nav aria-label="Page navigation example">
+              <ul class="pagination">
+                    <li class="page-item">
+                          <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                          </a>
+                    </li>
+                    {% for i in range(0, max_page) %}
+                    <li class="page-item"><a class="page-link" href="#">{{i+1}}</a></li>
+                    {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+              </ul>
+        </nav>
+        {% else %}
+        <h1 class="form_title">
+            앗 글이 없어요...
+        </h1>
+        </div>
+        {% endif %}
+        <div class="right-sidebar">
 
-    <div class="right-sidebar">
-
-    </div>
+        </div>
 </div>
 {% include "components/footer.html" %}
 </body>
