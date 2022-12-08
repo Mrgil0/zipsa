@@ -314,6 +314,7 @@ def index():
     else:
         return render_template('/components/modal.html', status='logout', posts=post, page="home", user_id='', replies=reply)
 
+
 @app.route('/page/login', methods=["GET"])
 def get_login():
     return render_template('/components/modal.html', status='logout')

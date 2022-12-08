@@ -55,7 +55,7 @@ $(document).on('click', '#reply_toggle', function(){
         modal.attr('style', 'display:none')
     }
 })
-$('#reply_button').click(function(){
+$(document).on('click', '#reply_button', function(){
     let id = $(this).attr('name')
     let reply_text = $('#reply_text'+id).val()
     if(reply_text == ''){
@@ -78,6 +78,7 @@ $('#reply_button').click(function(){
                 `
                 $('.reply_container'+id).prepend(append_reply)
             }
+            $('#reply_text'+id).val('')
         },
         error: function(response){
 
