@@ -97,7 +97,7 @@ def read_user(user_id):
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "select * from user where user_id = %s"
+    sql = "select u.user_id, pet_image FROM user u, pet p WHERE u.user_id = %s AND u.user_id = p.user_id"
     curs.execute(sql, user_id)
     result = curs.fetchall()
     db.commit()
@@ -280,8 +280,9 @@ def index():
     post = read_posts()
     if session.get('logged_in'):
         user_id = get_session_id()
+        user = read_user(user_id)
         profile_image = read_pet_image(user_id)
-        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user_id=user_id)
+        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user=user)
     else:
         return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
                                user_id='')
@@ -311,7 +312,7 @@ def read_my_profile_user():
     pet = read_pet(user_id)
     profile_image = read_pet_image(user_id)
     if request.args.get('result') == 'true':
-        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True, users=user, pets=pet, status='login', pet_image=profile_image,)
+        return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=True, users=user, pets=pet, status='login', pet_image=profile_image)
     else:
         return render_template('/components/modal.html', page='profile/user', toggle='user', password_chk=False, status='login', pet_image=profile_image)
 
@@ -323,7 +324,8 @@ def read_my_profile_post():
     cur_post = read_my_posts(user_id, cur_page)
     posts = read_my_all_posts(user_id)
     max_page = ceil(get_page_num(posts))
-    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, len=len(cur_post), max_page=max_page, cur_page=cur_page)
+    profile_image = read_pet_image(user_id)
+    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, len=len(cur_post), max_page=max_page, cur_page=cur_page, pet_image=profile_image)
 
 
 @app.route('/posts/search', methods=["GET"])
