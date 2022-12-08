@@ -1,4 +1,3 @@
-let pw_check = false
 $('.nav-item a').on("click", function(){
     $('.nav-item a').removeClass("active")
     $(this).removeClass("link-dark")

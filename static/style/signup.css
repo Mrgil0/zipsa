@@ -20,13 +20,17 @@
   background-color: #e6edfc;
   color: #6397fc;
   border: 0;
-  float:right;
   height:100%;
   margin-left: 10px;
 }
-.form_button, #id_box{
+.form_button{
   display: flex;
   justify-content: center;
+}
+#id_box{
+  display: flex;
+  align-items:center;
+  justify-content: space-between;
 }
 #join_button{
   margin-left: 5px;
