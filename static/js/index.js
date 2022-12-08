@@ -88,4 +88,7 @@ $('#form_image').change(function(e) {   //input 박스의 상태 변화(파일�
     let file = e.target.files
     preview(file[0], '.image_input_box')
 })
-
+function resize(obj){
+    obj.style.height = "1px";
+    obj.style.height = (12+obj.scrollHeight) + "px"
+}

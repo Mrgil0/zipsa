@@ -87,7 +87,7 @@ def read_my_posts(user_id, cur_page):
 
 def get_page_num(post):
     if len(post) == 0:
-        return
+        return 0
     page_num = ceil(len(post) / 5)
     return page_num
 
@@ -124,7 +124,7 @@ def read_user(user_id):
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "select u.user_id, pet_image FROM user u, pet p WHERE u.user_id = %s AND u.user_id = p.user_id"
+    sql = "select * FROM user WHERE user_id = %s"
     curs.execute(sql, user_id)
     result = curs.fetchall()
     db.commit()
