@@ -23,7 +23,7 @@ function join(){
     }
     $.ajax({
         type : "POST",
-        url : "/api/user/signup",
+        url : "/api/users/signup",
         data : {'id_give': user_id, 'pw_give': password, 'em_give': email,
             'pet_type_give': pet_type, 'pet_name_give': pet_name, 'pet_introduce_give': pet_introduce,'pet_image_src': file_url},
         success : function (response){
