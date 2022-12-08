@@ -32,10 +32,10 @@
         {% else %}
         <br>
         <form class="form" id="form_input">
-            <div>
-                <lebel for="modify_id" class="form-label">아이디</lebel>
+            <lebel for="modify_id" class="form-label">아이디</lebel>
+            <div id="id_box">
                 <input type="text" name="user_id" id="modify_id" class="form-control" style="display: inline-block" value="{{users[0][0]}}" readonly placeholder="아이디"/>
-                <button type="button" class="btn btn-outline-info">수정불가</button>
+                <button type="button" class="btn" disabled>수정불가</button>
             </div><br>
             <lebel for="modify_password" class="form-label">비밀번호</lebel>
             <input type="password" placeholder="비밀번호" name="password" id="modify_password" class="form-control" value="{{users[0][1]}}"/><br>
