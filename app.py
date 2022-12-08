@@ -316,7 +316,6 @@ def index():
     else:
         return render_template('/components/modal.html', status='logout', posts=post, page="home", user_id='', replies=reply)
 
-
 @app.route('/page/login', methods=["GET"])
 def get_login():
     return render_template('/components/modal.html', status='logout')
@@ -348,9 +347,8 @@ def read_my_profile_user():
 
 @app.route('/page/profile/post', methods=["GET"])
 def read_my_profile_post():
-    cur_page = request.args.get('page')
     user_id = get_session_id()
-    cur_post = read_my_posts(user_id, cur_page)
+    cur_post = read_my_posts(user_id)
     posts = read_my_all_posts(user_id)
     max_page = get_page_num(posts)
     profile_image = read_pet_image(user_id)

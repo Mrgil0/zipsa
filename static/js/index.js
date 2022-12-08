@@ -17,8 +17,8 @@ $('#post_button').click(function(e){
         }
     })
 })
-$('#modify_button').click(function(){
-    post_id = $('#modify_button').attr('name')
+$(document).on('click', '#modify_button', function(){
+    post_id = $(this).attr('name')
     text_input = $('#'+post_id)
     text_input.attr('readonly', false)
     text_input.focus()
