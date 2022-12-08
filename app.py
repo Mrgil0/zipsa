@@ -46,6 +46,21 @@ def read_posts():
     return result
 
 
+def read_replies():
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from reply"
+    curs.execute(sql)
+    result = list(curs.fetchall())
+    if len(result) == 0:
+        return ''
+    print(result)
+    db.commit()
+    db.close()
+    return result
+
+
 def read_my_posts(user_id, cur_page):
     db = set_db_password()
     curs = db.cursor()
@@ -182,12 +197,12 @@ def insert_post(user_id, post_content, post_date):
     db.close()
 
 
-def insert_reply(user_id, reply_content, reply_date):
+def insert_reply(post_id, user_id, reply_content, reply_date):
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "insert into reply values (null, %s, %s,%s)"
-    record = (user_id, reply_content, reply_date)
+    sql = "insert into reply values (null, %s, %s, %s,%s)"
+    record = (post_id, user_id, reply_content, reply_date)
     curs.execute(sql, record)
     db.commit()
     db.close()
@@ -278,14 +293,14 @@ def get_page_num(post):
 @app.route('/')
 def index():
     post = read_posts()
+    reply = read_replies()
     if session.get('logged_in'):
         user_id = get_session_id()
         user = read_user(user_id)
         profile_image = read_pet_image(user_id)
-        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user=user)
+        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user=user, replies=reply)
     else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
-                               user_id='')
+        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='', replies=reply)
 
 
 @app.route('/page/login', methods=["GET"])
@@ -399,9 +414,8 @@ def get_password():
 def insert_posts():
     content_receive = request.form['post_give']
     date_receive = request.form['date_give']
-    file_receive = request.form['file_give']
     user_id = get_session_id()
-    insert_post(user_id, content_receive, date_receive, file_receive)
+    insert_post(user_id, content_receive, date_receive)
 
     return jsonify({'msg': 'success'})
 
@@ -410,8 +424,9 @@ def insert_posts():
 def insert_replies():
     reply_receive = request.form['reply_give']
     date_receive = request.form['date_give']
+    id_receive = request.form['id_give']
     user_id = get_session_id()
-    insert_reply(user_id, reply_receive, date_receive)
+    insert_reply(id_receive, user_id, reply_receive, date_receive)
     return jsonify({'msg': 'success'})
 
 

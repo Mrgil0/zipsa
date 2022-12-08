@@ -91,7 +91,16 @@
                 {% endif %}
                 <button type="button" id="reply_toggle" class="{{posts[i][0]}}">▼</button>
                 <div class="reply_container{{posts[i][0]}}" style="display:none">
-
+                    {% for i in range(0, replies|length) %}
+                    <div class="user-profile">
+                        <img src="../static/images/user.png">
+                    <div>
+                        <p>{{replies[i][2]}}</p>
+                        <span>{{replies[i][4]}}</span>
+                    </div>
+                        <input type="text" id="reply_content_box" class="form-control" style="display: inline-block" value="{{replies[i][3]}}" readonly />
+                    </div>
+                    {% endfor %}
                     <hr>
                     {% if status == 'login' %}
                     <div class="reply_input">
