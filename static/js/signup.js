@@ -42,17 +42,17 @@ $(document).on('click', '#user_id_check_btn', function(){
 })
 let changed = document.querySelectorAll(".dropdown-item")
 changed.forEach(element=>{
-    element.addEventListener("click", e=>{
-        let pet_name = e.target.innerHTML
+    element.addEventListener("click", e=>{  // changed 모든 요소의 클릭이벤트
+        let type_text = e.target.innerHTML               // 클릭한 타켓의 값
         let pet_type = $('#pet_type_form')
-        if(pet_name === '직접 입력하기'){
+        if(type_text === '직접 입력하기'){
             pet_type.attr('readonly', false)
             pet_type.val('')
             pet_type.attr('placeholder', '입력하세요')
             pet_type.focus()
         } else{
             pet_type.attr('readonly', true)
-            pet_type.val(pet_name)
+            pet_type.val(type_text)
         }
 
     })

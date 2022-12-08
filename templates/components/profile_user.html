@@ -24,7 +24,7 @@
     </div>
     <div class="container" id="join_form">
         <h2 class="form_title" style="margin-top:20px">회원 정보 수정</h2>
-        {% if password_chk == false %}
+        {% if password_chk == false %}      <!-- password_chk를 true로 만드는건 비밀번호를 입력하는것 -->
         <form class="form" id="form_chk">
             <input type="text" name="password" id="chk_input" class="form-control" style="display: inline-block;" placeholder="비밀번호 입력하세요."/>
             <button type="button" class="btn btn-primary" id="password_chk_button">확인</button>
@@ -70,6 +70,7 @@
 
     </div>
 </div>
+{% include "components/footer.html" %}
 {% block content %}
 {% endblock %}
 </body>

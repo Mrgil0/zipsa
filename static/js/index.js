@@ -1,8 +1,8 @@
-let refresh = 0
+let refresh = 0     // 모달 창을 새로고침 하기 위한 변수(modal.js 참고)
 let post_id
 let text_input
 let confirm_button_id
-let date = getFormatDate(new Date())
+let date = getFormatDate(new Date())// 현재 날짜
 $('#post_button').click(function(e){
     let post_area = $('#post_area').val()
     $.ajax({
@@ -17,8 +17,8 @@ $('#post_button').click(function(e){
         }
     })
 })
-$('#modify_button').click(function(){
-    post_id = $('#modify_button').attr('name')
+$(document).on('click', '#modify_button', function(){
+    post_id = $(this).attr('name')
     text_input = $('#'+post_id)
     text_input.attr('readonly', false)
     text_input.focus()
@@ -84,13 +84,14 @@ $('#reply_button').click(function(){
         }
     })
 })
-$('#form_image').change(function(e) {
+$('#form_image').change(function(e) {   //input 박스의 상태 변화(파일을 올리면 동작)
     let file = e.target.files
     preview(file[0], '.image_input_box')
 })
-
-
-
+function resize(obj){
+    obj.style.height = "1px";
+    obj.style.height = (12+obj.scrollHeight) + "px"
+}
 $(document).on('click','#delete_button', function(){
     post_id=$(this). attr('name')
     $.ajax({
@@ -107,5 +108,4 @@ $(document).on('click','#delete_button', function(){
 
         }
     })
-}
-)
+})

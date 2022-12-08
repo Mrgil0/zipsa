@@ -1,4 +1,4 @@
-#join_form{
+#join_form, #no_post{
   position: sticky;
   left:50%;
   transform: translate(-50%);
