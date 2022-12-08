@@ -78,6 +78,18 @@ def read_my_posts(user_id, cur_page):
     db.commit()
     db.close()
     return result
+    # 글의 총 갯수 13개
+    # 한 페이지당 5개라면
+    # 페이지의 총 갯수는 13/5 2.6 -> 3개 (아래의 get_page_num)
+    # 클릭한 페이지가 1이면 LIMIT 0, 5 / 2라면 LIMIT 5, 10 (0을 곱하면 오류가 생겨서 예외처리함)
+    # 페이지에 맞는 글 리스트가 return됨
+
+
+def get_page_num(post):
+    if len(post) == 0:
+        return
+    page_num = ceil(len(post) / 5)
+    return page_num
 
 
 def read_one_post(post_id):
@@ -289,16 +301,10 @@ def delete_post(post_id):
 def get_session_id():
     user_id = session['user_id']
     return user_id
+    # 로그인 시 담은 아이디 return
 
 
-def get_page_num(post):
-    if len(post) == 0:
-        return
-    page_num = len(post) / 5
-    return page_num
-
-
-# route
+# ------------------------------------ 함수 구분 ---------------------------------------------#
 @app.route('/')
 def index():
     post = read_posts()
@@ -346,7 +352,7 @@ def read_my_profile_post():
     user_id = get_session_id()
     cur_post = read_my_posts(user_id, cur_page)
     posts = read_my_all_posts(user_id)
-    max_page = ceil(get_page_num(posts))
+    max_page = get_page_num(posts)
     profile_image = read_pet_image(user_id)
     reply = read_replies()
     return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, max_page=max_page, cur_page=cur_page, pet_image=profile_image, replies=reply)

@@ -54,7 +54,7 @@
                 {% endif %}
 
                 <div class="post-input-container">
-                    {% if status == 'login' %}
+                    {% if status == 'login' %}  <!--유저의 로그인 상태(조건) -->
                     <textarea rows="3" placeholder="오늘의 반려동물 자랑을 해보세요" id="post_area"></textarea>
                     <div class="add-post-links">
                         <div id="image_input_box">
@@ -64,22 +64,22 @@
                         </div>
                         <button type="button" class="btn btn-outline-info" id="post_button">작성</button>
                     </div>
-                    {% else %}
+                    {% else %} <!--유저의 로그아웃 상태(조건) -->
                     <textarea rows="3" placeholder="로그인이 필요합니다" readonly></textarea>
                     {% endif %}
                 </div>
             </div>
-            {% for i in range(0, posts|length) %}
+            {% for i in range(0, posts|length) %}   <!--모든 글 목록(반복) -->
             <div class="post-container">
                 <div class="user-profile">
                     <img src="../static/images/user.png">
                     <div>
-                        <p>{{posts[i][1]}}</p>
-                        <span>{{posts[i][3]}}</span>
+                        <p>{{posts[i][1]}}</p>      <!--i번째 글의 2번째(아이디) -->
+                        <span>{{posts[i][3]}}</span><!--i번째 글의 4번째(글 작성 시간) -->
                     </div>
                 </div>
-                <textarea class="form-control" id="{{posts[i][0]}}" readonly>{{posts[i][2]}}</textarea>
-                {% if user_id == posts[i][1] %}
+                <textarea class="form-control" id="{{posts[i][0]}}" readonly>{{posts[i][2]}}</textarea> <!--i번째 글의 3번째(글 내용) -->
+                {% if user_id == posts[i][1] %}     <!--글쓴 아이디가 로그인한 유저면(조건) -->
                 <div class="input_group">
                     <button type="button" class="btn btn-outline-success" id="confirm_button{{posts[i][0]}}" onclick="modify_check()" hidden>확인</button>
                     <button type="button" name="{{posts[i][0]}}" class="btn btn-outline-info" id="modify_button">수정</button>
@@ -88,20 +88,21 @@
                 {% endif %}
                 <button type="button" id="reply_toggle" class="{{posts[i][0]}}">▼</button>
                 <div class="reply_container{{posts[i][0]}}" style="display:none">
-                    {% for j in range(0, replies|length) %}
-                    {% if replies[j][1] == posts[i][0] %}
+                    {% for j in range(0, replies|length) %} <!--모든 댓글 목록(반복) -->
+                    {% if replies[j][1] == posts[i][0] %}   <!--답글의 post_id가 현재 달릴 글의 post_id와 같을때(조건) -->
                     <div class="user-profile">
                         <img src="../static/images/user.png">
                     <div>
-                        <p>{{replies[j][2]}}</p>
-                        <span>{{replies[j][4]}}</span>
+                        <p>{{replies[j][2]}}</p>        <!--i번째 댓글의 3번째(아이디) -->
+                        <span>{{replies[j][4]}}</span>  <!--i번째 댓글의 5번째(댓글 날짜) -->
                     </div>
                         <input type="text" id="reply_content_box" class="form-control" style="display: inline-block" value="{{replies[j][3]}}" readonly />
+                                                                                                                    <!--i번째 댓글의 4번째(댓글내용) -->
                     </div>
                     {% endif %}
                     {% endfor %}
                     <hr>
-                    {% if status == 'login' %}
+                    {% if status == 'login' %}          <!--댓글은 로그인한 유저만 쓸수 있다. -->
                     <div class="reply_input">
                         <div class="user-profile" styler="display:inline-block">
                             <img src="../static/images/user.png">
