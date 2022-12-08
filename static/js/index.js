@@ -92,3 +92,20 @@ function resize(obj){
     obj.style.height = "1px";
     obj.style.height = (12+obj.scrollHeight) + "px"
 }
+$(document).on('click','#delete_button', function(){
+    post_id=$(this). attr('name')
+    $.ajax({
+        type: 'DELETE',
+        url: '/api/posts',
+        data: {'post_give': post_id},
+        success: function (result) {
+            if (result['msg'] == 'deleted') {
+               refresh=1
+                modalOpen("deleted")
+            }
+        },
+        error: function (response) {
+
+        }
+    })
+})
