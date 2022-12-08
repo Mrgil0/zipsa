@@ -9,7 +9,6 @@ $("#password_chk_button").click(function(){
     let password = $('#chk_input').val()
     check_pw(password, '/api/checkpw', '비밀번호')
 })
-let refresh = 0
 let file_url
 function modify_user(){
     let password = $('#modify_password').val()

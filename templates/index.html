@@ -44,7 +44,7 @@
                 <div class="user-profile">
                     <img src="../static/images/user.png">
                     <div>
-                        <p>{{user[0][0]}}</p>
+                        <p>{{user_id}}</p>
                     </div>
                 </div>
                 {% else %}
@@ -72,7 +72,7 @@
                     {% endif %}
                 </div>
             </div>
-            {% for i in range(0, len) %}
+            {% for i in range(0, posts|length) %}
             <div class="post-container">
                 <div class="user-profile">
                     <img src="../static/images/user.png">
@@ -91,15 +91,17 @@
                 {% endif %}
                 <button type="button" id="reply_toggle" class="{{posts[i][0]}}">▼</button>
                 <div class="reply_container{{posts[i][0]}}" style="display:none">
-                    {% for i in range(0, replies|length) %}
+                    {% for j in range(0, replies|length) %}
+                    {% if replies[j][1] == posts[i][0] %}
                     <div class="user-profile">
                         <img src="../static/images/user.png">
                     <div>
-                        <p>{{replies[i][2]}}</p>
-                        <span>{{replies[i][4]}}</span>
+                        <p>{{replies[j][2]}}</p>
+                        <span>{{replies[j][4]}}</span>
                     </div>
-                        <input type="text" id="reply_content_box" class="form-control" style="display: inline-block" value="{{replies[i][3]}}" readonly />
+                        <input type="text" id="reply_content_box" class="form-control" style="display: inline-block" value="{{replies[j][3]}}" readonly />
                     </div>
+                    {% endif %}
                     {% endfor %}
                     <hr>
                     {% if status == 'login' %}

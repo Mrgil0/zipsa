@@ -305,11 +305,10 @@ def index():
     reply = read_replies()
     if session.get('logged_in'):
         user_id = get_session_id()
-        user = read_user(user_id)
         profile_image = read_pet_image(user_id)
-        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, len=len(post), page="home", user=user, replies=reply)
+        return render_template('/components/modal.html', status='login', pet_image=profile_image, posts=post, page="home", user_id=user_id, replies=reply)
     else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home", user_id='', replies=reply)
+        return render_template('/components/modal.html', status='logout', posts=post, page="home", user_id='', replies=reply)
 
 
 @app.route('/page/login', methods=["GET"])
@@ -321,7 +320,7 @@ def get_login():
 def logout():
     post = read_posts()
     session['logged_in'] = False
-    return render_template('/components/modal.html', status='logout', page="home", posts=post, len=len(post))
+    return render_template('/components/modal.html', status='logout', page="home", posts=post)
 
 
 @app.route('/page/signup', methods=["GET"])
@@ -349,7 +348,8 @@ def read_my_profile_post():
     posts = read_my_all_posts(user_id)
     max_page = ceil(get_page_num(posts))
     profile_image = read_pet_image(user_id)
-    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, len=len(cur_post), max_page=max_page, cur_page=cur_page, pet_image=profile_image)
+    reply = read_replies()
+    return render_template('/components/modal.html', page='profile/post', toggle='post', posts=cur_post, max_page=max_page, cur_page=cur_page, pet_image=profile_image, replies=reply)
 
 
 @app.route('/posts/search', methods=["GET"])
@@ -359,9 +359,9 @@ def search_posts():
     if session.get('logged_in'):
         profile_image = read_pet_image(session['user_id'])
         return render_template('/components/modal.html', status='login', pet_image=profile_image,
-                               posts=post, len=len(post), page="home", user_id=session['user_id'])
+                               posts=post, page="home", user_id=session['user_id'])
     else:
-        return render_template('/components/modal.html', status='logout', posts=post, len=len(post), page="home",
+        return render_template('/components/modal.html', status='logout', posts=post, page="home",
                                user_id='')
 
 

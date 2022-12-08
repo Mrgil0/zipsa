@@ -22,7 +22,7 @@
         {% include "components/profile_nav.html" %}
     </div>
     <div class="main-content">
-        {% for i in range(0, len) %}
+        {% for i in range(0, posts|length) %}
         <div class="post-container">
             <div class="user-profile">
                 <img src="../static/images/user.png">
@@ -41,7 +41,18 @@
             {% endif %}
             <button type="button" id="reply_toggle" class="{{posts[i][0]}}">▼</button>
             <div class="reply_container{{posts[i][0]}}" style="display:none">
-
+                {% for j in range(0, replies|length) %}
+                {% if replies[j][1] == posts[i][0] %}
+                <div class="user-profile">
+                    <img src="../static/images/user.png">
+                <div>
+                    <p>{{replies[j][2]}}</p>
+                    <span>{{replies[j][4]}}</span>
+                </div>
+                    <input type="text" id="reply_content_box" class="form-control" style="display: inline-block" value="{{replies[j][3]}}" readonly />
+                </div>
+                {% endif %}
+                {% endfor %}
                 <hr>
                 {% if status == 'login' %}
                 <div class="reply_input">
