@@ -17,7 +17,14 @@
     top: 70px;
     align-self: flex-start;
     height: 100vh;
+    padding: 20px;
+    border-radius: 4px;
+    color: #626262;
 }
 header{
     background-color: #ffffff;
+}
+
+#logo {
+    margin-right: 200px;
 }
