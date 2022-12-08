@@ -58,12 +58,7 @@ changed.forEach(element=>{
     })
 })
  $('#choose_image').change(function(e){
-    let file =  e.target.files[0]
-    if(file == null){
-        file_url = 'no image'
-    } else{
-        file_url = window.URL.createObjectURL(file)
-        $('#pet_image').attr('src', file_url)
-
-    }
+    let file =  e.target.files
+     file_url = window.URL.createObjectURL(file[0])
+    preview(file[0], '#image_input_box')
 })

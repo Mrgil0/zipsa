@@ -51,6 +51,7 @@
     border-radius: 20px;
     padding: 20px;
     color: #626262;
+    border: 0.4em inset #626262;
 }
 
 .user-profile{

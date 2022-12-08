@@ -36,7 +36,7 @@ def read_posts():
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "select * from post"
+    sql = "select * from post ORDER BY post_date desc"
     curs.execute(sql)
     result = curs.fetchall()
     if len(result) == 0:
@@ -62,7 +62,20 @@ def read_my_posts(user_id, cur_page):
         return ''
     db.commit()
     db.close()
-    print(result)
+    return result
+
+
+def read_one_post(post_id):
+    db = set_db_password()
+    curs = db.cursor()
+
+    sql = "select * from post where post_id=%s"
+    curs.execute(sql, post_id)
+    result = curs.fetchall()
+    if len(result) == 0:
+        return ''
+    db.commit()
+    db.close()
     return result
 
 
@@ -162,7 +175,6 @@ def insert_pet(user_id, pet_type, pet_name, pet_introduce, pet_image):
 def insert_post(user_id, post_content, post_date):
     db = set_db_password()
     curs = db.cursor()
-
     sql = "insert into post values (null, %s, %s,%s)"
     record = (user_id, post_content, post_date)
     curs.execute(sql, record)
@@ -269,7 +281,6 @@ def index():
     if session.get('logged_in'):
         user_id = get_session_id()
         profile_image = read_pet_image(user_id)
-        print(post)
         return render_template('/components/modal.html', status='login', pet_image=profile_image,
                                posts=post, len=len(post), page="home", user_id=user_id)
     else:
@@ -387,9 +398,21 @@ def get_password():
 def insert_posts():
     content_receive = request.form['post_give']
     date_receive = request.form['date_give']
+    file_receive = request.form['file_give']
     user_id = get_session_id()
-    insert_post(user_id, content_receive, date_receive)
+    insert_post(user_id, content_receive, date_receive, file_receive)
+
     return jsonify({'msg': 'success'})
+
+
+@app.route('/api/upload', methods=["POST"])
+def insert_image():
+    file_receive = request.files['file']
+    post = read_posts()
+    user_id = get_session_id()
+    profile_image = read_pet_image(user_id)
+    return render_template('/components/modal.html', status='login', pet_image=profile_image,
+                               posts=post, len=len(post), page="home", user_id=user_id)
 
 
 @app.route('/api/replies', methods=["POST"])

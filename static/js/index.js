@@ -3,16 +3,15 @@ let post_id
 let text_input
 let confirm_button_id
 let date = getFormatDate(new Date())
+let file_src =
 $('#post_button').click(function(e){
     let post_area = $('#post_area').val()
     $.ajax({
         type: 'POST',
         url: '/api/posts',
-        data: {'post_give': post_area,'date_give': date},
+        data: {'post_give': post_area,'date_give': date, "file_give": file_src},
         success: function(response){
-        if (response['msg']=='success'){
-            modalOpen('글 작성 완료!')
-        }
+            $('#upload_form').submit()
         },
         error: function(response){
 
@@ -87,29 +86,7 @@ $('#reply_button').click(function(){
     })
 })
 $('#form_image').change(function(e) {
-    let file = e.target.files
-    preview(file[0])
+    file = e.target.files
+    preview(file[0], '.image_input_box')
 })
 
-function preview(f) {
-    let filename = f.name
-    if (filename.length > 10) {
-        filename = filename.substring(0, 7) + "...";
-    }
-    //div에 이미지 추가
-    let img_div = '<div style="display: inline-flex; padding: 10px;"  class="picdiv">';
-
-    //이미지 파일 미리보기
-    if (f.type.match('image.*')) {
-        let reader = new FileReader(); //파일을 읽기 위한 FileReader객체 생성
-        reader.onload = function (e) { //파일 읽어들이기를 성공했을때 호출되는 이벤트 핸들러
-            img_div += '<img src="' + e.target.result + '" title="' + f.name + '" width=100 height=100 />';
-            $(img_div).prependTo('#image_input_box');
-        }
-        reader.readAsDataURL(f);
-    } else {
-        img_div += '<img src="/resources/img/fileImg.png" title="' + f.name + '" width=100 height=100 />';
-        $(img_div).prependTo('#image_input_box');
-    }
-    $('.picdiv').attr('src')
-}

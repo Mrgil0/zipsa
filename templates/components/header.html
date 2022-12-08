@@ -8,13 +8,13 @@
               <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
               </ul>
 
-              <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" method="get" action="/posts/search" id="search_form">
-                    <input type="search" class="form-control form-control-dark text-bg-dark" placeholder="검색..." name="search_input" aria-label="Search" id="search_input">
+              <form class="col-12 col-lg-auto mb-3 mb-lg-0" role="search" method="get" action="/posts/search" id="search_form">
+                    <input type="search" class="form-control" placeholder="검색..." name="search_input" aria-label="Search" id="search_input">
                 </form>
 
                 <div class="text-end">
                     {% if status == 'logout' %}
-                    <button type="button" class="btn btn-outline-light me-2" onclick="location.href='/page/login'">Login</button>
+                    <button type="button" class="btn btn-secondary ms-2" onclick="location.href='/page/login'">Login</button>
                     {% elif status == 'login' %}
                     <div class="dropdown text-end">
                         <a href="#" class="d-block link-dark text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
