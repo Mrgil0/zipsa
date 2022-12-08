@@ -65,12 +65,9 @@ def read_my_posts(user_id, cur_page):
     db = set_db_password()
     curs = db.cursor()
 
-    sql = "select * from post where user_id=%s LIMIT %s, %s"
-    try:
-        min_num = (int(cur_page)-1) * 5
-    except TypeError:
-        min_num = 0
-    record = (user_id, min_num, int(cur_page)*5)
+    sql = "select * from post where user_id=%s LIMIT %s, 5"
+    min_num = (int(cur_page)-1) * 5
+    record = (user_id, min_num)
     curs.execute(sql, record)
     result = curs.fetchall()
     if len(result) == 0:
@@ -81,13 +78,14 @@ def read_my_posts(user_id, cur_page):
     # 글의 총 갯수 13개
     # 한 페이지당 5개라면
     # 페이지의 총 갯수는 13/5 2.6 -> 3개 (아래의 get_page_num)
-    # 클릭한 페이지가 1이면 LIMIT 0, 5 / 2라면 LIMIT 5, 10 (0을 곱하면 오류가 생겨서 예외처리함)
+    # 클릭한 페이지가 1이면 LIMIT 0, 5 / 2라면 LIMIT 5, 5
     # 페이지에 맞는 글 리스트가 return됨
 
 
 def get_page_num(post):
     if len(post) == 0:
         return 0
+    print(len(post) / 5)
     page_num = ceil(len(post) / 5)
     return page_num
 
@@ -347,9 +345,10 @@ def read_my_profile_user():
 
 @app.route('/page/profile/post', methods=["GET"])
 def read_my_profile_post():
+    cur_page = request.args.get('page')
     user_id = get_session_id()
-    cur_post = read_my_posts(user_id)
     posts = read_my_all_posts(user_id)
+    cur_post = read_my_posts(user_id, cur_page)
     max_page = get_page_num(posts)
     profile_image = read_pet_image(user_id)
     reply = read_replies()
