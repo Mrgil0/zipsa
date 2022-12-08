@@ -22,14 +22,7 @@
     background-size: cover;
     border-radius: 10px;
 }
-.story p{
-    position: absolute;
-    bottom: 10px;
-    width: 100%;
-    text-align: center;
-    color:aqua;
-    font-size: 14px;
-}
+
 .story1{
     background-image: linear-gradient(transparent, rgba(0,0,0,0.5)),url(../images/pet1.jpg);
 }
@@ -43,10 +36,10 @@
 .write-post-container{
     width: 100%;
     background: #fff;
-    border-radius: 20px;
+    border-radius: 8px;
     padding: 20px;
     color: #626262;
-    border: 0.4em inset #626262;
+    border: 0.4px inset #6396fc;
 }
 
 .user-profile{
@@ -103,8 +96,8 @@
     display:inline-block;
     width: 100%;
     height: fit-content;
-    background: #adb5bd;
-    border-radius: 6px;
+    background: #b3c9f5;
+    border-radius: 8px;
     padding: 20px;
     color: #626262;
     margin: 20px auto;
@@ -171,6 +164,10 @@ footer {
     opacity: .4;
     font-weight: 200;
 }
+#reply_toggle{
+    border: 0;
+    background-color: #b3c9f5;
+}
 .reply_container{
     margin-left: 40px;
 }
@@ -198,6 +195,7 @@ footer {
     margin-bottom: 30px;
     color: #626262;
     width: fit-content;
+    font-size: 14px;
 }
 .shortcut-links a img{
     width: 40px;
@@ -238,7 +236,10 @@ footer {
     text-align: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0.6px 1.3px 1.3px hsl(0deg 0% 0% / 0.48);
+}
+.left-event h3{
+    font-size: 26px;
 }
 .event p{
     font-size: 12px;
@@ -253,7 +254,7 @@ footer {
     bottom: 0;
     left: 0;
     width: 100%;
-    background: #003399;
+    background: rgba(99, 151, 252, 1);
     color: #fff;
     font-size: 10px;
     padding: 4px 0;
@@ -261,4 +262,8 @@ footer {
 p.thick{
     font-weight: bold;
     font-size: 14px;
+}
+#post_button{
+    background-color: #6397fc;
+    color: #ffffff;
 }

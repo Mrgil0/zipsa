@@ -17,13 +17,30 @@
   width:200px
 }
 #user_id_check_btn{
+  background-color: #e6edfc;
+  color: #6397fc;
+  border: 0;
   float:right;
   height:100%;
   margin-left: 10px;
 }
-.form_button button{
-  float:right
+.form_button, #id_box{
+  display: flex;
+  justify-content: center;
 }
 #join_button{
   margin-left: 5px;
+  background-color: #6397fc;
+  color: white;
+  border: 0;
+}
+#login_button{
+  background-color: #e6edfc;
+  color: #6397fc;
+  border: 0;
+}
+#signup_button{
+  background-color: #6397fc;
+  color: white;
+  border: 0;
 }
