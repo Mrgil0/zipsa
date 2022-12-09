@@ -8,10 +8,7 @@ $(document).on('click', '#modalClose', function(){
 
 function modalOpen(str){
     let scrollTop = document.scrollingElement.scrollTop
-    let windowHeight = window.innerHeight
     $('#modal').css('display', 'flex')
-    $('#modal.modal-overlay').css('width', document.documentElement.scrollWidth)
-    $('#modal.modal-overlay').css('height', windowHeight)   //창높이만큼 세로 설정
     $('#modal.modal-overlay').css('top', scrollTop )        //내가 올린 스크롤만큼 밑으로 이동
     $('#context').html(str)
 }
