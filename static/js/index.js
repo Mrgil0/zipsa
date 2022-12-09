@@ -66,18 +66,17 @@ $(document).on('click', '#reply_button', function(){
         url: '/api/replies',
         data: {'id_give': id, 'reply_give': reply_text, 'date_give': date},
         success: function(response){
-            if(response['msg'] == 'success'){
-                let append_reply = `<div class="user-profile">
-                                        <img src="../static/images/user.png">
-                                    <div>
-                                        <p>아이디</p>
-                                        <span>날짜</span>
-                                    </div>
-                                        <input type="text" id="reply_content_box" value="${reply_text}" class="form-control" style="display: inline-block" readonly value="답글입니다"/>
-                                    </div>
-                `
-                $('.reply_container'+id).prepend(append_reply)
-            }
+            let user_id = response['user_id']
+            let append_reply = `<div class="user-profile">
+                                    <img src="../static/images/user.png">
+                                <div>
+                                    <p>${user_id}</p>
+                                    <span>${date}</span>
+                                </div>
+                                    <input type="text" id="reply_content_box" value="${reply_text}" class="form-control" style="display: inline-block" readonly value="답글입니다"/>
+                                </div>
+            `
+            $('.reply_container'+id).prepend(append_reply)
             $('#reply_text'+id).val('')
         },
         error: function(response){
